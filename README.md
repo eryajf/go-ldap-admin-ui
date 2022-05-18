@@ -36,8 +36,7 @@
 
 > admin / 123456
 
-演示地址：[http://go-ldap-admin.eryajf.net](http://go-ldap-admin.eryajf.net)
-
+演示地址：[http://demo-go-ldap-admin.eryajf.net](http://demo-go-ldap-admin.eryajf.net)
 ## 核心功能
 
 - 基于 GIN WEB API 框架，基于Casbin的 RBAC 访问控制模型，JWT 认证，Validator 参数校验
