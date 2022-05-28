@@ -236,7 +236,6 @@ export default {
 
     // 修改
     update(row) {
-    
       this.dialogFormData.ID = row.ID
       this.dialogFormData.name = row.name
       this.dialogFormData.keyword = row.keyword
@@ -362,7 +361,6 @@ export default {
 
     // 修改权限按钮
     async updatePermission(roleId) {
-      
       this.roleId = roleId
       this.permsDialogVisible = true
       this.getMenuTree()
@@ -376,7 +374,7 @@ export default {
       this.menuTreeLoading = true
       try {
         const { data } = await getMenuTree()
-        
+
         this.menuTree = data
       } finally {
         this.menuTreeLoading = false
@@ -388,7 +386,7 @@ export default {
       this.apiTreeLoading = true
       try {
         const { data } = await getApiTree()
-        
+
         this.apiTree = data
       } finally {
         this.apiTreeLoading = false
@@ -399,9 +397,9 @@ export default {
     async getRoleMenusById(roleId) {
       this.permissionLoading = true
       let rseData = []
-      const params={}
-      params.roleId=roleId
-      
+      const params = {}
+      params.roleId = roleId
+
       try {
         const { data } = await getRoleMenusById(params)
 
@@ -421,12 +419,12 @@ export default {
     async getRoleApisById(roleId) {
       this.permissionLoading = true
       let resData = []
-      const params={}
-      params.roleId=roleId
-      
+      const params = {}
+      params.roleId = roleId
+
       try {
         const { data } = await getRoleApisById(params)
-  
+
         resData = data
       } finally {
         this.permissionLoading = false
@@ -448,7 +446,7 @@ export default {
       ids = [...new Set(ids)]
 
       try {
-        await updateRoleMenusById( {roleId:this.roleId, menuIds: ids })
+        await updateRoleMenusById({ roleId: this.roleId, menuIds: ids })
       } finally {
         this.permissionLoading = false
       }
@@ -466,7 +464,7 @@ export default {
       this.permissionLoading = true
       const ids = this.$refs.roleApiTree.getCheckedKeys(true)
       try {
-        await updateRoleApisById({roleId:this.roleId, apiIds: ids })
+        await updateRoleApisById({ roleId: this.roleId, apiIds: ids })
       } finally {
         this.permissionLoading = false
       }

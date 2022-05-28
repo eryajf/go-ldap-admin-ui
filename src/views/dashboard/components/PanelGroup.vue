@@ -1,13 +1,13 @@
 <template>
-  <el-row :gutter="40" class="panel-group" >
-    <el-col :xs="8" :sm="8" :lg="8" class="card-panel-col" v-for='item in dataInfo' :key='item.dataType'>
+  <el-row :gutter="40" class="panel-group">
+    <el-col v-for="item in dataInfo" :key="item.dataType" :xs="8" :sm="8" :lg="8" class="card-panel-col">
       <div class="card-panel" @click="handleSetLineChartData(item.dataType)">
         <div class="card-panel-icon-wrapper icon-people">
           <svg-icon :icon-class="item.icon" class-name="card-panel-icon" />
         </div>
         <div class="card-panel-description">
           <div class="card-panel-text">
-           {{item.dataName}}
+            {{ item.dataName }}
           </div>
           <count-to :start-val="0" :end-val="item.dataCount" :duration="2600" class="card-panel-num" />
         </div>
@@ -23,24 +23,22 @@ export default {
   components: {
     CountTo
   },
-  data(){
-    return{
-      dataInfo:null, //首页数据
+  data() {
+    return {
+      dataInfo: null // 首页数据
     }
   },
   created() {
     this.getDashInfo()
-    
   },
   methods: {
-    async getDashInfo(){
-      try{
-         const { data }= await getDash()
-         this.dataInfo=data
-      }finally{
-
+    async getDashInfo() {
+      try {
+        const { data } = await getDash()
+        this.dataInfo = data
+      } finally {
+        console.log(this.dataInfo)
       }
-    
     },
     handleSetLineChartData(type) {
       this.$emit('handleSetLineChartData', type)
