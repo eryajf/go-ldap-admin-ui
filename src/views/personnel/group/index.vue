@@ -127,7 +127,7 @@ export default {
         groupName: undefined,
         remark: undefined,
         pageNum: 1,
-        pageSize: 5000// 平常百姓人家应该不会有这么多数据吧
+        pageSize: 1000// 平常百姓人家应该不会有这么多数据吧,后台限制最大单次获取1000条
       },
       // 表格数据
       tableData: [],

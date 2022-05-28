@@ -285,7 +285,7 @@ wLXapv+ZfsjG7NgdawIDAQAB
         ],
         departmentId: [
           { required: true, message: '请选择部门', trigger: 'change' },
-          { min: 1, max: 20, message: '长度在 0 到 20 个字符', trigger: 'blur' }
+          { min: 1, max: 20, message: '请从列表中选择相应的部门', trigger: 'blur' }
         ],
         introduction: [
           { required: false, message: '说明', trigger: 'blur' },
@@ -327,7 +327,7 @@ wLXapv+ZfsjG7NgdawIDAQAB
       try {
         const checkParams = {
           pageNum: 1,
-          pageSize: 5000 // 平常百姓人家应该不会有这么多数据吧
+          pageSize: 1000 // 平常百姓人家应该不会有这么多数据吧
         }
         const { data } = await getGroupTree(checkParams)
         this.departmentsOptions = [{ ID: 0, groupName: '顶级类目', children: data }]
