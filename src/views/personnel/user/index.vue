@@ -294,7 +294,6 @@ wLXapv+ZfsjG7NgdawIDAQAB
   created() {
     this.getTableData()
     this.getRoles()
-    this.getAllGroups()
   },
   methods: {
     // 查询
@@ -339,11 +338,13 @@ wLXapv+ZfsjG7NgdawIDAQAB
     create() {
       this.dialogFormTitle = '新增用户'
       this.dialogType = 'create'
+      this.getAllGroups()
       this.dialogFormVisible = true
     },
 
     // 修改
     update(row) {
+      this.getAllGroups()
       this.dialogFormData.ID = row.ID
       this.dialogFormData.username = row.username
       this.dialogFormData.password = ''
