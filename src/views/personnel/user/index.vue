@@ -507,6 +507,8 @@ wLXapv+ZfsjG7NgdawIDAQAB
         avatar: '',
         introduction: '',
         roleIds: '',
+        departments: '',
+        position: '',
         departmentId: undefined
       }
     },
