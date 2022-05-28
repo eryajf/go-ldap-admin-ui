@@ -31,7 +31,8 @@
       <el-table v-loading="loading" :data="tableData" border stripe style="width: 100%" @selection-change="handleSelectionChange">
         <el-table-column type="selection" width="55" align="center" />
         <el-table-column show-overflow-tooltip sortable prop="username" label="用户名" />
-        <el-table-column show-overflow-tooltip sortable prop="nickname" label="昵称" />
+        <el-table-column show-overflow-tooltip sortable prop="nickname" label="中文名" />
+        <el-table-column show-overflow-tooltip sortable prop="givenName" label="花名" />
         <el-table-column show-overflow-tooltip sortable prop="status" label="状态" align="center">
           <template slot-scope="scope">
             <el-tag size="small" :type="scope.row.status === 1 ? 'success':'danger'" disable-transitions>{{ scope.row.status === 1 ? '正常':'禁用' }}</el-tag>
@@ -40,8 +41,8 @@
         <el-table-column show-overflow-tooltip sortable prop="mail" label="邮箱" />
         <el-table-column show-overflow-tooltip sortable prop="mobile" label="手机号" />
         <el-table-column show-overflow-tooltip sortable prop="jobNumber" label="工号" />
-         <el-table-column show-overflow-tooltip sortable prop="departments" label="部门" />
-          <el-table-column show-overflow-tooltip sortable prop="position" label="职位" />
+        <el-table-column show-overflow-tooltip sortable prop="departments" label="部门" />
+        <el-table-column show-overflow-tooltip sortable prop="position" label="职位" />
         <el-table-column show-overflow-tooltip sortable prop="creator" label="创建人" />
         <el-table-column show-overflow-tooltip sortable prop="introduction" label="说明" />
         <el-table-column fixed="right" label="操作" align="center" width="120">
@@ -70,60 +71,95 @@
         @current-change="handleCurrentChange"
       />
 
-      <el-dialog :title="dialogFormTitle" :visible.sync="dialogFormVisible" width="30%">
-        <el-form ref="dialogForm" size="small" :model="dialogFormData" :rules="dialogFormRules" label-width="100px">
-          <el-form-item label="用户名" prop="username">
-            <el-input ref="password" v-model.trim="dialogFormData.username" placeholder="用户名" />
-          </el-form-item>
-          <el-form-item :label="dialogType === 'create' ? '新密码':'重置密码'" prop="password">
-            <el-input v-model.trim="dialogFormData.password" autocomplete="off" :type="passwordType" :placeholder="dialogType === 'create' ? '新密码':'重置密码'" />
-            <span class="show-pwd" @click="showPwd">
-              <svg-icon :icon-class="passwordType === 'password' ? 'eye' : 'eye-open'" />
-            </span>
-          </el-form-item>
-          <el-form-item label="角色" prop="roleIds">
-            <el-select v-model.trim="dialogFormData.roleIds" multiple placeholder="请选择角色" style="width:100%">
-              <el-option
-                v-for="item in roles"
-                :key="item.ID"
-                :label="item.name"
-                :value="item.ID"
-              />
-            </el-select>
-          </el-form-item>
-          <el-form-item label="状态" prop="status">
-            <el-select v-model.trim="dialogFormData.status" placeholder="请选择状态" style="width:100%">
-              <el-option label="正常" :value="1" />
-              <el-option label="禁用" :value="2" />
-            </el-select>
-          </el-form-item>
-          <el-form-item label="昵称" prop="nickname">
-            <el-input v-model.trim="dialogFormData.nickname" placeholder="昵称" />
-          </el-form-item>
-          <el-form-item label="邮箱" prop="email">
-            <el-input v-model.trim="dialogFormData.mail" placeholder="邮箱" />
-          </el-form-item>
-          <el-form-item label="手机号" prop="mobile">
-            <el-input v-model.trim="dialogFormData.mobile" placeholder="手机号" />
-          </el-form-item>
-          <el-form-item label="代号" prop="givenName">
-            <el-input v-model.trim="dialogFormData.givenName" placeholder="代号" />
-          </el-form-item>
-          <el-form-item label="工号" prop="jobNumber">
-            <el-input v-model.trim="dialogFormData.jobNumber" placeholder="工号" />
-          </el-form-item>
-          <el-form-item label="地址" prop="postalAddress">
-            <el-input v-model.trim="dialogFormData.postalAddress" placeholder="地址" />
-          </el-form-item>
-          <el-form-item label="部门" prop="departments">
-            <el-input v-model.trim="dialogFormData.departments" placeholder="部门" />
-          </el-form-item>
-          <el-form-item label="职业" prop="position">
-            <el-input v-model.trim="dialogFormData.position" placeholder="职业" />
-          </el-form-item>
-          <el-form-item label="说明" prop="introduction">
-            <el-input v-model.trim="dialogFormData.introduction" type="textarea" placeholder="说明" show-word-limit maxlength="100" />
-          </el-form-item>
+      <el-dialog :title="dialogFormTitle" :visible.sync="dialogFormVisible" width="50%">
+        <el-form ref="dialogForm" size="small" :model="dialogFormData" :rules="dialogFormRules" label-width="80px">
+          <el-row>
+            <el-col :span="12">
+              <el-form-item label="用户名" prop="username">
+                <el-input ref="password" v-model.trim="dialogFormData.username" :disabled="disabled" placeholder="用户名（拼音）" />
+              </el-form-item>
+            </el-col>
+            <el-col :span="12">
+              <el-form-item label="中文名字" prop="nickname">
+                <el-input v-model.trim="dialogFormData.nickname" placeholder="中文名字" />
+              </el-form-item>
+            </el-col>
+            <el-col :span="12">
+              <el-form-item label="花名" prop="givenName">
+                <el-input v-model.trim="dialogFormData.givenName" placeholder="花名" />
+              </el-form-item>
+            </el-col>
+            <el-col :span="12">
+              <el-form-item label="邮箱" prop="mail">
+                <el-input v-model.trim="dialogFormData.mail" placeholder="邮箱" />
+              </el-form-item>
+            </el-col>
+            <el-col :span="12">
+              <el-form-item :label="dialogType === 'create' ? '新密码':'重置密码'" prop="password">
+                <el-input v-model.trim="dialogFormData.password" autocomplete="off" :type="passwordType" :placeholder="dialogType === 'create' ? '新密码':'重置密码'" />
+                <span class="show-pwd" @click="showPwd">
+                  <svg-icon :icon-class="passwordType === 'password' ? 'eye' : 'eye-open'" />
+                </span>
+              </el-form-item>
+            </el-col>
+            <el-col :span="12">
+              <el-form-item label="角色" prop="roleIds">
+                <el-select v-model.trim="dialogFormData.roleIds" multiple placeholder="请选择角色" style="width:100%">
+                  <el-option
+                    v-for="item in roles"
+                    :key="item.ID"
+                    :label="item.name"
+                    :value="item.ID"
+                  />
+                </el-select>
+              </el-form-item>
+            </el-col>
+            <el-col :span="12">
+              <el-form-item label="状态" prop="status">
+                <el-select v-model.trim="dialogFormData.status" placeholder="请选择状态" style="width:100%">
+                  <el-option label="正常" :value="1" />
+                  <el-option label="禁用" :value="2" />
+                </el-select>
+              </el-form-item>
+            </el-col>
+            <el-col :span="12">
+              <el-form-item label="手机号" prop="mobile">
+                <el-input v-model.trim="dialogFormData.mobile" placeholder="手机号" />
+              </el-form-item>
+            </el-col>
+            <el-col :span="12">
+              <el-form-item label="工号" prop="jobNumber">
+                <el-input v-model.trim="dialogFormData.jobNumber" placeholder="工号" />
+              </el-form-item>
+            </el-col>
+            <el-col :span="12">
+              <el-form-item label="职位" prop="position">
+                <el-input v-model.trim="dialogFormData.position" placeholder="职业" />
+              </el-form-item>
+            </el-col>
+            <el-col :span="24">
+              <el-form-item label="所属部门" prop="departmentId">
+                <treeselect
+                  v-model="dialogFormData.departmentId"
+                  :options="departmentsOptions"
+                  placeholder="请选择部门"
+                  :normalizer="normalizer"
+                  @input="treeselectInput"
+                  @select="onOperatePersonChanged"
+                />
+              </el-form-item>
+            </el-col>
+            <el-col :span="24">
+              <el-form-item label="地址" prop="postalAddress">
+                <el-input v-model.trim="dialogFormData.postalAddress" type="textarea" placeholder="地址" :autosize="{minRows: 3, maxRows: 6}" show-word-limit maxlength="100" />
+              </el-form-item>
+            </el-col>
+            <el-col :span="24">
+              <el-form-item label="说明" prop="introduction">
+                <el-input v-model.trim="dialogFormData.introduction" type="textarea" placeholder="说明" :autosize="{minRows: 3, maxRows: 6}" show-word-limit maxlength="100" />
+              </el-form-item>
+            </el-col>
+          </el-row>
         </el-form>
         <div slot="footer" class="dialog-footer">
           <el-button size="mini" @click="cancelForm()">取 消</el-button>
@@ -137,11 +173,23 @@
 
 <script>
 import JSEncrypt from 'jsencrypt'
+import Treeselect from '@riophae/vue-treeselect'
+import '@riophae/vue-treeselect/dist/vue-treeselect.css'
 import { getUsers, createUser, updateUserById, batchDeleteUserByIds } from '@/api/personnel/user'
 import { getRoles } from '@/api/system/role'
+import { getGroupTree } from '@/api/personnel/group'
 
 export default {
   name: 'User',
+  components: {
+    Treeselect
+  },
+  props: {
+    disabled: { // username 默认不可编辑，若需要至为可编辑，请（在新增和编辑处）去掉这个值的控制，且配合后端的ldap-user-name-modify配置使用
+      type: Boolean,
+      default: false
+    }
+  },
   data() {
     var checkPhone = (rule, value, callback) => {
       if (!value) {
@@ -169,9 +217,13 @@ export default {
       tableData: [],
       total: 0,
       loading: false,
-
+      isUpdate: false,
+      // 部门信息数据
+      treeselectValue: 0,
       // 角色
       roles: [],
+      // 部门信息
+      departmentsOptions: [],
 
       passwordType: 'password',
 
@@ -196,13 +248,14 @@ wLXapv+ZfsjG7NgdawIDAQAB
         avatar: '',
         introduction: '',
         roleIds: '',
-        ID:'',
-        mail:'',
-        givenName:'',
-        jobNumber:'',
-        postalAddress:'',
-        departments:'',
-        position:''
+        ID: '',
+        mail: '',
+        givenName: '',
+        jobNumber: '',
+        postalAddress: '',
+        departments: '',
+        position: '',
+        departmentId: undefined
       },
       dialogFormRules: {
         username: [
@@ -213,14 +266,15 @@ wLXapv+ZfsjG7NgdawIDAQAB
           { required: false, message: '请输入密码', trigger: 'blur' },
           { min: 6, max: 30, message: '长度在 6 到 30 个字符', trigger: 'blur' }
         ],
-        mail:[
-          { required: true, message: '请输入邮箱', trigger: 'blur' },
+        mail: [
+          { required: true, message: '请输入邮箱', trigger: 'blur' }
         ],
-        jobNumber:[
+        jobNumber: [
           { required: true, message: '请输入工号', trigger: 'blur' },
+          { min: 0, max: 20, message: '长度在 0 到 20 个字符', trigger: 'blur' }
         ],
         nickname: [
-          { required: false, message: '请输入昵称', trigger: 'blur' },
+          { required: true, message: '请输入昵称', trigger: 'blur' },
           { min: 2, max: 20, message: '长度在 2 到 20 个字符', trigger: 'blur' }
         ],
         mobile: [
@@ -228,6 +282,17 @@ wLXapv+ZfsjG7NgdawIDAQAB
         ],
         status: [
           { required: true, message: '请选择状态', trigger: 'change' }
+        ],
+        departmentId: [
+          { required: true, message: '请选择部门', trigger: 'change' },
+          { validator: (rule, value, callBack) => {
+            if (value < 1) {
+              callBack('请选择有效的部门')
+            } else {
+              callBack()
+            }
+          }
+          }
         ],
         introduction: [
           { required: false, message: '说明', trigger: 'blur' },
@@ -263,7 +328,20 @@ wLXapv+ZfsjG7NgdawIDAQAB
         this.loading = false
       }
     },
-
+    // 获取所有的分组信息，用于弹框选取上级分组
+    async getAllGroups() {
+      this.loading = true
+      try {
+        const checkParams = {
+          pageNum: 1,
+          pageSize: 1000 // 平常百姓人家应该不会有这么多数据吧
+        }
+        const { data } = await getGroupTree(checkParams)
+        this.departmentsOptions = [{ ID: 0, groupName: '顶级类目', children: data }]
+      } finally {
+        this.loading = false
+      }
+    },
     // 获取角色数据
     async getRoles() {
       const res = await getRoles(null)
@@ -275,12 +353,15 @@ wLXapv+ZfsjG7NgdawIDAQAB
     create() {
       this.dialogFormTitle = '新增用户'
       this.dialogType = 'create'
+      this.disabled = false
+      this.getAllGroups()
       this.dialogFormVisible = true
     },
 
     // 修改
     update(row) {
-
+      this.disabled = true
+      this.getAllGroups()
       this.dialogFormData.ID = row.ID
       this.dialogFormData.username = row.username
       this.dialogFormData.password = ''
@@ -288,83 +369,80 @@ wLXapv+ZfsjG7NgdawIDAQAB
       this.dialogFormData.status = row.status
       this.dialogFormData.mobile = row.mobile
       this.dialogFormData.introduction = row.introduction
-      this.dialogFormData.roleIds = row.roleIds
+      // 遍历角色数组，获取角色ID
+      this.dialogFormData.roleIds = row.roles.map(item => item.ID)
 
       this.dialogFormTitle = '修改用户'
       this.dialogType = 'update'
       this.passwordType = 'password'
       this.dialogFormVisible = true
 
-
-        this.dialogFormData.mail = row.mail
-        this.dialogFormData.givenName = row.givenName
-        this.dialogFormData.jobNumber = row.jobNumber
-        this.dialogFormData.postalAddress = row.postalAddress
-        this.dialogFormData.departments = row.departments
-        this.dialogFormData.position = row.position
-
-
-
-
+      this.dialogFormData.mail = row.mail
+      this.dialogFormData.givenName = row.givenName
+      this.dialogFormData.jobNumber = row.jobNumber
+      this.dialogFormData.postalAddress = row.postalAddress
+      this.dialogFormData.departments = row.departments
+      this.dialogFormData.departmentId = row.departmentId
+      this.dialogFormData.position = row.position
     },
 
     // 提交表单
     submitForm() {
-      if(this.dialogFormData.nickname==''){
-         this.$message({
-            showClose: true,
-            message: '请填写昵称',
-            type: 'error'
-          })
-          return false
+      if (this.dialogFormData.nickname === '') {
+        this.$message({
+          showClose: true,
+          message: '请填写昵称',
+          type: 'error'
+        })
+        return false
       }
-      if(this.dialogFormData.username==''){
-         this.$message({
-            showClose: true,
-            message: '请填写用户名',
-            type: 'error'
-          })
-          return false
+      if (this.dialogFormData.username === '') {
+        this.$message({
+          showClose: true,
+          message: '请填写用户名',
+          type: 'error'
+        })
+        return false
       }
-       if(this.dialogFormData.mail==''){
-         this.$message({
-            showClose: true,
-            message: '请填写邮箱',
-            type: 'error'
-          })
-          return false
+      if (this.dialogFormData.mail === '') {
+        this.$message({
+          showClose: true,
+          message: '请填写邮箱',
+          type: 'error'
+        })
+        return false
       }
-       if(this.dialogFormData.jobNumber==''){
-         this.$message({
-            showClose: true,
-            message: '请填写工号',
-            type: 'error'
-          })
-          return false
+      if (this.dialogFormData.jobNumber === '') {
+        this.$message({
+          showClose: true,
+          message: '请填写工号',
+          type: 'error'
+        })
+        return false
       }
-       if(this.dialogFormData.mobile==''){
-         this.$message({
-            showClose: true,
-            message: '请填写手机号',
-            type: 'error'
-          })
-          return false
+      if (this.dialogFormData.mobile === '') {
+        this.$message({
+          showClose: true,
+          message: '请填写手机号',
+          type: 'error'
+        })
+        return false
       }
-      if(this.dialogFormData.status==''){
-         this.$message({
-            showClose: true,
-            message: '请填写状态',
-            type: 'error'
-          })
-          return false
+      if (this.dialogFormData.status === '') {
+        this.$message({
+          showClose: true,
+          message: '请填写状态',
+          type: 'error'
+        })
+        return false
       }
-        if(this.dialogFormData.roleIds==''){
-         this.$message({
-            showClose: true,
-            message: '请选择角色列表',
-            type: 'error'
-          })
-          return false
+      if (this.dialogFormData.roleIds === '') {
+        this.$message({
+          showClose: true,
+          message: '请选择角色列表',
+          type: 'error'
+        })
+        return false
       }
       this.$refs['dialogForm'].validate(async valid => {
         if (valid) {
@@ -384,10 +462,10 @@ wLXapv+ZfsjG7NgdawIDAQAB
           try {
             if (this.dialogType === 'create') {
               const { msg } = await createUser(this.dialogFormDataCopy)
-              
+
               message = msg
             } else {
-              const { msg } = await updateUserById( this.dialogFormDataCopy)
+              const { msg } = await updateUserById(this.dialogFormDataCopy)
               message = msg
             }
           } finally {
@@ -428,7 +506,10 @@ wLXapv+ZfsjG7NgdawIDAQAB
         mobile: '',
         avatar: '',
         introduction: '',
-        roleIds: ''
+        roleIds: '',
+        departments: '',
+        position: '',
+        departmentId: undefined
       }
     },
 
@@ -474,7 +555,6 @@ wLXapv+ZfsjG7NgdawIDAQAB
 
     // 单个删除
     async singleDelete(Id) {
-  
       this.loading = true
       let msg = ''
       try {
@@ -508,6 +588,21 @@ wLXapv+ZfsjG7NgdawIDAQAB
     handleCurrentChange(val) {
       this.params.pageNum = val
       this.getTableData()
+    },
+    // treeselect
+    normalizer(node) {
+      return {
+        id: node.ID,
+        label: node.groupName,
+        children: node.children
+      }
+    },
+    treeselectInput(value) {
+      this.treeselectValue = value
+    },
+    onOperatePersonChanged(obj) {
+      // this.dialogFormData.departmentId = obj.ID
+      this.dialogFormData.departments = obj.groupName
     }
   }
 }

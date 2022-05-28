@@ -61,6 +61,7 @@ export default {
   components: {
     // GithubCorner,
     PanelGroup,
+    // eslint-disable-next-line vue/no-unused-components
     LineChart,
     RadarChart,
     PieChart,

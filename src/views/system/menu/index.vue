@@ -221,7 +221,7 @@ export default {
       this.loading = true
       try {
         const { data } = await getMenuTree()
-       
+
         this.tableData = data
         this.treeselectData = [{ ID: 0, title: '顶级类目', children: data.menuTree }]
       } finally {
@@ -284,7 +284,7 @@ export default {
           try {
             if (this.dialogType === 'create') {
               const { msg } = await createMenu(dialogFormDataCopy)
-               message= msg
+              message = msg
             } else {
               const { msg } = await updateMenuById(dialogFormDataCopy)
               message = msg
@@ -349,10 +349,10 @@ export default {
         this.multipleSelection.forEach(x => {
           menuIds.push(x.ID)
         })
-        let  message= ''
+        let message = ''
         try {
           const { msg } = await batchDeleteMenuByIds({ menuIds: menuIds })
-          message =msg 
+          message = msg
         } finally {
           this.loading = false
         }
