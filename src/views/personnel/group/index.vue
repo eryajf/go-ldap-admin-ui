@@ -159,7 +159,14 @@ export default {
           { min: 1, max: 50, message: 'ou、cn或者其他', trigger: 'blur' }
         ],
         parentId: [
-          { required: true, message: '请选择父级', trigger: 'blur' }
+          { required: true, message: '请选择父级', trigger: 'blur' },
+          { validator: (rule, value, callBack) => {
+            if (value >= 0) {
+              callBack()
+            } else {
+              callBack('请选择有效的部门')
+            }
+          } }
         ],
         remark: [
           { required: false, message: '说明', trigger: 'blur' },

@@ -285,7 +285,14 @@ wLXapv+ZfsjG7NgdawIDAQAB
         ],
         departmentId: [
           { required: true, message: '请选择部门', trigger: 'change' },
-          { min: 1, max: 20, message: '请从列表中选择相应的部门', trigger: 'blur' }
+          { validator: (rule, value, callBack) => {
+            if (value < 1) {
+              callBack('请选择有效的部门')
+            } else {
+              callBack()
+            }
+          }
+          }
         ],
         introduction: [
           { required: false, message: '说明', trigger: 'blur' },
