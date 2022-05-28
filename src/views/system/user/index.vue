@@ -192,13 +192,13 @@ wLXapv+ZfsjG7NgdawIDAQAB
         avatar: '',
         introduction: '',
         roleIds: '',
-        ID:'',
-        mail:'',
-        givenName:'',
-        jobNumber:'',
-        postalAddress:'',
-        departments:'',
-        position:''
+        ID: '',
+        mail: '',
+        givenName: '',
+        jobNumber: '',
+        postalAddress: '',
+        departments: '',
+        position: ''
       },
       dialogFormRules: {
         username: [
@@ -209,11 +209,11 @@ wLXapv+ZfsjG7NgdawIDAQAB
           { required: false, message: '请输入密码', trigger: 'blur' },
           { min: 6, max: 30, message: '长度在 6 到 30 个字符', trigger: 'blur' }
         ],
-        mail:[
-          { required: true, message: '请输入邮箱', trigger: 'blur' },
+        mail: [
+          { required: true, message: '请输入邮箱', trigger: 'blur' }
         ],
-        jobNumber:[
-          { required: true, message: '请输入工号', trigger: 'blur' },
+        jobNumber: [
+          { required: true, message: '请输入工号', trigger: 'blur' }
         ],
         nickname: [
           { required: false, message: '请输入昵称', trigger: 'blur' },
@@ -290,76 +290,71 @@ wLXapv+ZfsjG7NgdawIDAQAB
       this.passwordType = 'password'
       this.dialogFormVisible = true
 
-
-        this.dialogFormData.mail = row.mail
-        this.dialogFormData.givenName = row.givenName
-        this.dialogFormData.jobNumber = row.jobNumber
-        this.dialogFormData.postalAddress = row.postalAddress
-        this.dialogFormData.departments = row.departments
-        this.dialogFormData.position = row.position
-
-
-
-
+      this.dialogFormData.mail = row.mail
+      this.dialogFormData.givenName = row.givenName
+      this.dialogFormData.jobNumber = row.jobNumber
+      this.dialogFormData.postalAddress = row.postalAddress
+      this.dialogFormData.departments = row.departments
+      this.dialogFormData.position = row.position
     },
 
     // 提交表单
     submitForm() {
-      if(this.dialogFormData.nickname==''){
-         this.$message({
-            showClose: true,
-            message: '请填写昵称',
-            type: 'error'
-          })
-          return false
+      if (this.dialogFormData.nickname === '') {
+        this.$message({
+          showClose: true,
+          message: '请填写昵称',
+          type: 'error'
+        })
+        return false
       }
-      if(this.dialogFormData.username==''){
-         this.$message({
-            showClose: true,
-            message: '请填写用户名',
-            type: 'error'
-          })
-          return false
+      if (this.dialogFormData.username === '') {
+        this.$message({
+          showClose: true,
+          message: '请填写用户名',
+          type: 'error'
+        })
+        return false
       }
-       if(this.dialogFormData.mail==''){
-         this.$message({
-            showClose: true,
-            message: '请填写邮箱',
-            type: 'error'
-          })
-          return false
+      if (this.dialogFormData.mail === '') {
+        this.$message({
+          showClose: true,
+          message: '请填写邮箱',
+          type: 'error'
+        })
+        return false
       }
-       if(this.dialogFormData.jobNumber==''){
-         this.$message({
-            showClose: true,
-            message: '请填写工号',
-            type: 'error'
-          })
-          return false
+      if (this.dialogFormData.jobNumber === '') {
+        this.$message({
+          showClose: true,
+          message: '请填写工号',
+          type: 'error'
+        })
+        return false
       }
-       if(this.dialogFormData.mobile==''){
-         this.$message({
-            showClose: true,
-            message: '请填写手机号',
-            type: 'error'
-          })
-          return false
+      if (this.dialogFormData.mobile === '') {
+        this.$message({
+          showClose: true,
+          message: '请填写手机号',
+          type: 'error'
+        })
+        return false
       }
-      if(this.dialogFormData.status==''){
-         this.$message({
-            showClose: true,
-            message: '请填写状态',
-            type: 'error'
-          })
-          return false
+      if (this.dialogFormData.status === '') {
+        this.$message({
+          showClose: true,
+          message: '请填写状态',
+          type: 'error'
+        })
+        return false
       }
-        if(this.dialogFormData.roleIds==''){
-         this.$message({
-            showClose: true,
-            message: '请选择角色列表',
-            type: 'error'
-          })
-          return false
+      if (this.dialogFormData.roleIds === '') {
+        this.$message({
+          showClose: true,
+          message: '请选择角色列表',
+          type: 'error'
+        })
+        return false
       }
       this.$refs['dialogForm'].validate(async valid => {
         if (valid) {
@@ -381,7 +376,7 @@ wLXapv+ZfsjG7NgdawIDAQAB
               const { msg } = await createUser(this.dialogFormDataCopy)
               message = msg
             } else {
-              const { msg } = await updateUserById( this.dialogFormDataCopy)
+              const { msg } = await updateUserById(this.dialogFormDataCopy)
               message = msg
             }
           } finally {
@@ -468,7 +463,6 @@ wLXapv+ZfsjG7NgdawIDAQAB
 
     // 单个删除
     async singleDelete(Id) {
-  
       this.loading = true
       let msg = ''
       try {

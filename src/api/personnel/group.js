@@ -1,6 +1,14 @@
 import request from '@/utils/request'
 
-//分组列表(已完成)
+// 获取分组树(已完成)
+export function getGroupTree(params) {
+  return request({
+    url: '/api/group/tree',
+    method: 'get',
+    params
+  })
+}
+// 分组列表(已完成)
 export function groupList(params) {
   return request({
     url: '/api/group/list',
@@ -8,31 +16,31 @@ export function groupList(params) {
     params
   })
 }
-//添加分组(已完成)
+// 添加分组(已完成)
 export function groupAdd(data) {
-    return request({
-      url: '/api/group/add',
-      method: 'post',
-      data
-    })
-  }
-//更新分组(已完成)
-export function groupUpdate(data) {
-    return request({
-      url: '/api/group/update',
-      method: 'post',
-      data
-    })
-  }
-//删除分组（已完成）
-export function groupDel(data) {
-    return request({
-      url: '/api/group/delete',
-      method: 'post',
-      data
-    })
+  return request({
+    url: '/api/group/add',
+    method: 'post',
+    data
+  })
 }
-//在分组内的用户（已完成）
+// 更新分组(已完成)
+export function groupUpdate(data) {
+  return request({
+    url: '/api/group/update',
+    method: 'post',
+    data
+  })
+}
+// 删除分组（已完成）
+export function groupDel(data) {
+  return request({
+    url: '/api/group/delete',
+    method: 'post',
+    data
+  })
+}
+// 在分组内的用户（已完成）
 export function useGroupList(params) {
   return request({
     url: '/api/group/useringroup',
@@ -40,7 +48,7 @@ export function useGroupList(params) {
     params
   })
 }
-//不再分组内的用户（已完成）
+// 不再分组内的用户（已完成）
 export function useGroupRole(params) {
   return request({
     url: '/api/group/usernoingroup',
@@ -48,20 +56,19 @@ export function useGroupRole(params) {
     params
   })
 }
-//添加用户到分组（已完成）
+// 添加用户到分组（已完成）
 export function groupInfo(data) {
-    return request({
-      url: '/api/group/adduser',
-      method: 'post',
-      data
-    })
+  return request({
+    url: '/api/group/adduser',
+    method: 'post',
+    data
+  })
 }
-//将用户从分组移出（已完成）
+// 将用户从分组移出（已完成）
 export function delGroup(data) {
-    return request({
-      url: '/api/group/removeuser',
-      method: 'post',
-      data
-    })
-  }
-          
+  return request({
+    url: '/api/group/removeuser',
+    method: 'post',
+    data
+  })
+}

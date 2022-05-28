@@ -44,8 +44,8 @@
           </span>
         </el-form-item>
       </el-tooltip>
-      <div class='footer-btn'>
-        <div class='btn-pass' @click='changePass'>忘记密码</div>
+      <div class="footer-btn">
+        <div class="btn-pass" @click="changePass">忘记密码</div>
         <!-- <router-link :to="{path:'/changePass'}" class='btn-pass'>忘记密码</router-link> -->
         <!-- <el-button :loading="loading" type="primary" class="login-btn" @click.native.prevent="delLogin">忘记密码</el-button> -->
         <el-button :loading="loading" type="primary" class="login-btn" @click.native.prevent="handleLogin">登录</el-button>
@@ -95,10 +95,8 @@ wLXapv+ZfsjG7NgdawIDAQAB
   watch: {
     $route: {
       handler: function(route) {
-
         const query = route.query
         if (query) {
-
           this.redirect = query.redirect
           this.otherQuery = this.getOtherQuery(query)
         }
@@ -135,11 +133,8 @@ wLXapv+ZfsjG7NgdawIDAQAB
       })
     },
     handleLogin() {
-
       this.$refs.loginForm.validate(valid => {
-
         if (valid) {
-
           this.loading = true
           // 密码RSA加密处理
           const encryptor = new JSEncrypt()
@@ -150,27 +145,23 @@ wLXapv+ZfsjG7NgdawIDAQAB
           const encLoginForm = { username: this.loginForm.username, password: encPassword }
           this.$store.dispatch('user/login', encLoginForm)
             .then(() => {
-
               this.$router.push({ path: this.redirect || '/', query: this.otherQuery })
               this.loading = false
             })
             .catch(() => {
-
               this.loading = false
             })
         } else {
-
           return false
         }
       })
     },
-    changePass(){
+    changePass() {
       // console.log(75545)
       // window.location.href='/changePass'
-      this.$router.push({ path:'/changePass'})
+      this.$router.push({ path: '/changePass' })
     },
     getOtherQuery(query) {
-
       return Object.keys(query).reduce((acc, cur) => {
         if (cur !== 'redirect') {
           acc[cur] = query[cur]

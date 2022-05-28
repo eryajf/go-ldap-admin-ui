@@ -225,7 +225,7 @@ export default {
               const { msg } = await createApi(this.dialogFormData)
               message = msg
             } else {
-              const { msg } = await updateApiById( this.dialogFormData)
+              const { msg } = await updateApiById(this.dialogFormData)
               message = msg
             }
           } finally {
@@ -278,10 +278,10 @@ export default {
         this.multipleSelection.forEach(x => {
           apiIds.push(x.ID)
         })
-        let  message= ''
+        let message = ''
         try {
           const { msg } = await batchDeleteApiByIds({ apiIds: apiIds })
-          message =msg 
+          message = msg
         } finally {
           this.loading = false
         }
@@ -309,7 +309,7 @@ export default {
     // 单个删除
     async singleDelete(Id) {
       this.loading = true
-      let  message= ''
+      let message = ''
       try {
         const { msg } = await batchDeleteApiByIds({ apiIds: [Id] })
         message = msg

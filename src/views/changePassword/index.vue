@@ -1,59 +1,55 @@
 <template>
   <div class="pass-page">
-    <div class='pass-mian'>
-      <input placeholder="请输入邮箱" v-model.trim="mail" class='pass-input' @change="changeInput($event)"/>
-      <div @click='submit' class='pass-btn'>确定</div>
+    <div class="pass-mian">
+      <input v-model.trim="mail" placeholder="请输入邮箱" class="pass-input" @change="changeInput($event)">
+      <div class="pass-btn" @click="submit">确定</div>
     </div>
   </div>
 </template>
 
 <script>
-import {emailPass} from '@/api/system/user'
-import store from '@/store'
+import { emailPass } from '@/api/system/user'
+
 export default {
-  name: 'changePass',
+  name: 'ChangePass',
   data() {
     return {
       // 查询参数
-      mail:''
+      mail: ''
     }
   },
   methods: {
     // 查询
     changeInput(e) {
-      this.mail=e.target.value
-     
+      this.mail = e.target.value
     },
-    async submit(){
+    async submit() {
       try {
-        const { msg,code } = await emailPass({mail:this.mail})
-       
-        if(code==0){
-           this.$message({
+        const { msg, code } = await emailPass({ mail: this.mail })
+
+        if (code === 0) {
+          this.$message({
             showClose: true,
             message: msg,
             type: 'success'
           })
           // 重新登录
           setTimeout(() => {
-            
-            this.$router.replace({path:'/login'})
+            this.$router.replace({ path: '/login' })
           }, 1500)
-        }else{
+        } else {
           this.$message({
-              showClose: true,
-              message: msg,
-              type: 'error'
+            showClose: true,
+            message: msg,
+            type: 'error'
           })
           return false
         }
-        
       } finally {
-    
+        console.log('finally')
       }
     }
- 
-    
+
   }
 }
 </script>
@@ -85,7 +81,7 @@ export default {
     }
   }
   // .container-card{
-    
+
   //   padding-top:25%;
   //   border: 0px solid #fff;
   //   box-shadow:0 0px 0px;
@@ -96,7 +92,7 @@ export default {
   //       text-align: center;
   //     }
   //   }
-   
+
   // }
 }
 </style>
