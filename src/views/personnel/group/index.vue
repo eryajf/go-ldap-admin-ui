@@ -84,7 +84,7 @@
       <el-dialog :title="dialogFormTitle" :visible.sync="dialogFormVisible">
         <el-form ref="dialogForm" size="small" :model="dialogFormData" :rules="dialogFormRules" label-width="120px">
           <el-form-item label="名称" prop="groupName">
-            <el-input v-model.trim="dialogFormData.groupName" placeholder="名称" />
+            <el-input v-model.trim="dialogFormData.groupName" :disabled="true" placeholder="名称" />
           </el-form-item>
           <el-form-item label="描述" prop="remark">
             <el-input v-model.trim="dialogFormData.remark" type="textarea" placeholder="描述" :autosize="{minRows: 3, maxRows: 6}" show-word-limit maxlength="100" />

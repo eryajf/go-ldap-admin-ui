@@ -76,7 +76,7 @@
           <el-row>
             <el-col :span="12">
               <el-form-item label="用户名" prop="username">
-                <el-input ref="password" v-model.trim="dialogFormData.username" placeholder="用户名（拼音）" />
+                <el-input ref="password" v-model.trim="dialogFormData.username" :disabled="disabled" placeholder="用户名（拼音）" />
               </el-form-item>
             </el-col>
             <el-col :span="12">
@@ -184,6 +184,12 @@ export default {
   components: {
     Treeselect
   },
+  props: {
+    disabled: { // username 默认不可编辑，若需要至为可编辑，请（在新增和编辑处）去掉这个值的控制，且配合后端的ldap-user-name-modify配置使用
+      type: Boolean,
+      default: false
+    }
+  },
   data() {
     var checkPhone = (rule, value, callback) => {
       if (!value) {
@@ -211,6 +217,7 @@ export default {
       tableData: [],
       total: 0,
       loading: false,
+      isUpdate: false,
       // 部门信息数据
       treeselectValue: 0,
       // 角色
@@ -277,7 +284,8 @@ wLXapv+ZfsjG7NgdawIDAQAB
           { required: true, message: '请选择状态', trigger: 'change' }
         ],
         departmentId: [
-          { required: true, message: '请选择部门', trigger: 'change' }
+          { required: true, message: '请选择部门', trigger: 'change' },
+          { min: 1, max: 20, message: '长度在 0 到 20 个字符', trigger: 'blur' }
         ],
         introduction: [
           { required: false, message: '说明', trigger: 'blur' },
@@ -338,12 +346,14 @@ wLXapv+ZfsjG7NgdawIDAQAB
     create() {
       this.dialogFormTitle = '新增用户'
       this.dialogType = 'create'
+      this.disabled = false
       this.getAllGroups()
       this.dialogFormVisible = true
     },
 
     // 修改
     update(row) {
+      this.disabled = true
       this.getAllGroups()
       this.dialogFormData.ID = row.ID
       this.dialogFormData.username = row.username
@@ -489,7 +499,8 @@ wLXapv+ZfsjG7NgdawIDAQAB
         mobile: '',
         avatar: '',
         introduction: '',
-        roleIds: ''
+        roleIds: '',
+        departmentId: undefined
       }
     },
 
