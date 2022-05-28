@@ -67,7 +67,7 @@
               v-model="dialogFormData.parentId"
               :options="treeselectData"
               :normalizer="normalizer"
-              style="width:440px"
+              placeholder="请选择上级分组"
               @input="treeselectInput"
             />
           </el-form-item>
