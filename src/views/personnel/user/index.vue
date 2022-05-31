@@ -144,6 +144,7 @@
                   :options="departmentsOptions"
                   placeholder="请选择部门"
                   :normalizer="normalizer"
+                  :multiple="true"
                   @input="treeselectInput"
                   @select="onOperatePersonChanged"
                 />
@@ -322,6 +323,14 @@ wLXapv+ZfsjG7NgdawIDAQAB
       this.loading = true
       try {
         const { data } = await getUsers(this.params)
+        data.users.forEach(item => {
+          const dataStrArr = item.departmentId.split(',')
+          const dataIntArr = []
+          dataStrArr.forEach(item => {
+            dataIntArr.push(+item)
+          })
+          item.departmentId = dataIntArr
+        })
         this.tableData = data.users
         this.total = data.total
       } finally {
@@ -337,7 +346,7 @@ wLXapv+ZfsjG7NgdawIDAQAB
           pageSize: 1000 // 平常百姓人家应该不会有这么多数据吧
         }
         const { data } = await getGroupTree(checkParams)
-        this.departmentsOptions = [{ ID: 0, groupName: '顶级类目', children: data }]
+        this.departmentsOptions = [{ ID: 0, groupName: '请选择部门信息', groupType: 'T', children: data }]
       } finally {
         this.loading = false
       }
@@ -593,7 +602,7 @@ wLXapv+ZfsjG7NgdawIDAQAB
     normalizer(node) {
       return {
         id: node.ID,
-        label: node.groupName,
+        label: node.groupType + '=' + node.groupName,
         children: node.children
       }
     },
@@ -602,7 +611,11 @@ wLXapv+ZfsjG7NgdawIDAQAB
     },
     onOperatePersonChanged(obj) {
       // this.dialogFormData.departmentId = obj.ID
-      this.dialogFormData.departments = obj.groupName
+      if (this.dialogFormData.departments === '') {
+        this.dialogFormData.departments = obj.groupName
+      } else {
+        this.dialogFormData.departments = this.dialogFormData.departments + ',' + obj.groupName
+      }
     }
   }
 }

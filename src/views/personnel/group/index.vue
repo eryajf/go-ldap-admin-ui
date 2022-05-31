@@ -2,7 +2,6 @@
   <div>
     <el-card class="container-card" shadow="always">
       <el-form size="mini" :inline="true" :model="params" class="demo-form-inline">
-        <!-- 待实现页面搜索功能后放开
         <el-form-item label="名称">
           <el-input v-model.trim="params.groupName" clearable placeholder="名称" @clear="search" />
         </el-form-item>
@@ -11,7 +10,10 @@
         </el-form-item>
         <el-form-item>
           <el-button :loading="loading" icon="el-icon-search" type="primary" @click="search">查询</el-button>
-        </el-form-item>-->
+        </el-form-item>
+        <el-form-item>
+          <el-button :loading="loading" icon="el-icon-plus" type="warning" @click="resetData">重置</el-button>
+        </el-form-item>
         <el-form-item>
           <el-button :loading="loading" icon="el-icon-plus" type="warning" @click="create">新增</el-button>
         </el-form-item>
@@ -20,7 +22,7 @@
         </el-form-item>
       </el-form>
 
-      <el-table v-loading="loading" :tree-props="{children: 'children', hasChildren: 'hasChildren'}" row-key="ID" :data="tableData" border stripe style="width: 100%" @selection-change="handleSelectionChange">
+      <el-table v-loading="loading" :default-expand-all="true" :tree-props="{children: 'children', hasChildren: 'hasChildren'}" row-key="ID" :data="infoTableData" border stripe style="width: 100%" @selection-change="handleSelectionChange">
         <el-table-column type="selection" width="55" align="center" />
         <el-table-column show-overflow-tooltip sortable prop="groupName" label="名称" />
         <el-table-column show-overflow-tooltip sortable prop="groupType" label="类型" />
@@ -131,6 +133,7 @@ export default {
       },
       // 表格数据
       tableData: [],
+      infoTableData: [],
       total: 0,
       loading: false,
       // 上级目录数据
@@ -204,16 +207,40 @@ export default {
   methods: {
     // 查询
     search() {
-      this.params.pageNum = 1
-      this.getTableData()
+      // 初始化表格数据
+      this.infoTableData = JSON.parse(JSON.stringify(this.tableData))
+      this.infoTableData = this.deal(this.infoTableData, node => node.groupName.includes(this.params.groupName) || node.remark.includes(this.params.remark))
     },
-
+    resetData() {
+      this.infoTableData = JSON.parse(JSON.stringify(this.tableData))
+    },
+    // 页面数据过滤
+    deal(nodes, predicate) {
+      // 如果已经没有节点了，结束递归
+      if (!(nodes && nodes.length)) {
+        return []
+      }
+      const newChildren = []
+      for (const node of nodes) {
+        if (predicate(node)) {
+          // 如果节点符合条件，直接加入新的节点集
+          newChildren.push(node)
+          node.children = this.deal(node.children, predicate)
+        } else {
+          // 如果当前节点不符合条件，递归过滤子节点，
+          // 把符合条件的子节点提升上来，并入新节点集
+          newChildren.push(...this.deal(node.children, predicate))
+        }
+      }
+      return newChildren
+    },
     // 获取表格数据
     async getTableData() {
       this.loading = true
       try {
         const { data } = await getGroupTree(this.params)
         this.tableData = data
+        this.infoTableData = JSON.parse(JSON.stringify(data))
         this.treeselectData = [{ ID: 0, groupName: '顶级类目', children: data }]
       } finally {
         this.loading = false
