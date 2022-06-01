@@ -1,6 +1,6 @@
 .DS_Store
 node_modules/
-# dist/  # 暂时将dist推送，以便于action打包通过
+dist/
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
