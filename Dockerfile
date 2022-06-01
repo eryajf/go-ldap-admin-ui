@@ -14,4 +14,4 @@ WORKDIR /app
 COPY --from=builder /app/default.conf /etc/nginx/conf.d/default.conf
 COPY --from=builder /app/dist .
 
-CMD ["nginx"]
+CMD nginx -g "daemon off;"
