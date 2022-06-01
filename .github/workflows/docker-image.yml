@@ -9,7 +9,7 @@ on:
       - main
 
 # Allows you to run this workflow manually from the Actions tab
-# 可以手动触发
+  # 可以手动触发
   workflow_dispatch:
     inputs:
       logLevel:
@@ -28,7 +28,7 @@ jobs:
         uses: actions/checkout@v2
       - name: Get current date
         id: date
-        run: echo "::set-output name=today::$(date +'%Y-%m-%d')"
+        run: echo "::set-output name=today::$(date +'%Y-%m-%d_%H-%M')"
       -
         name: Set up QEMU
         uses: docker/setup-qemu-action@v1
@@ -51,11 +51,11 @@ jobs:
         with:
           context: .
           file: ./Dockerfile
-# 所需要的体系结构，可以在 Available platforms 步骤中获取所有的可用架构
+          # 所需要的体系结构，可以在 Available platforms 步骤中获取所有的可用架构
           platforms: linux/amd64,linux/arm64/v8
-# 镜像推送时间
+          # 镜像推送时间
           push: ${{ github.event_name != 'pull_request' }}
-# 给清单打上多个标签
+          # 给清单打上多个标签
           tags: |
             eryajf/go-ldap-admin-ui:${{ steps.date.outputs.today }}
             eryajf/go-ldap-admin-ui:latest
