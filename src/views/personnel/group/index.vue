@@ -20,6 +20,9 @@
         <el-form-item>
           <el-button :disabled="multipleSelection.length === 0" :loading="loading" icon="el-icon-delete" type="danger" @click="batchDelete">批量删除</el-button>
         </el-form-item>
+        <el-form-item>
+          <el-button :loading="loading" icon="el-icon-share" type="danger" @click="syncDingTalkDepts">同步钉钉部门</el-button>
+        </el-form-item>
       </el-form>
 
       <el-table v-loading="loading" :default-expand-all="true" :tree-props="{children: 'children', hasChildren: 'hasChildren'}" row-key="ID" :data="infoTableData" border stripe style="width: 100%" @selection-change="handleSelectionChange">
@@ -43,18 +46,6 @@
           </template>
         </el-table-column>
       </el-table>
-      <!--tree模式下取消分页选项
-      <el-pagination
-        :current-page="params.pageNum"
-        :page-size="params.pageSize"
-        :total="total"
-        :page-sizes="[1, 5, 10, 30]"
-        layout="total, prev, pager, next, sizes"
-        background
-        style="margin-top: 10px;float:right;margin-bottom: 10px;"
-        @size-change="handleSizeChange"
-        @current-change="handleCurrentChange"
-      />-->
       <!-- 新增 -->
       <el-dialog :title="dialogFormTitle" :visible.sync="updateLoading">
         <el-form ref="dialogForm" size="small" :model="dialogFormData" :rules="dialogFormRules" label-width="120px">
@@ -104,7 +95,7 @@
 <script>
 import Treeselect from '@riophae/vue-treeselect'
 import '@riophae/vue-treeselect/dist/vue-treeselect.css'
-import { getGroupTree, groupAdd, groupUpdate, groupDel } from '@/api/personnel/group'
+import { getGroupTree, groupAdd, groupUpdate, groupDel, syncDingTalkDeptsApi } from '@/api/personnel/group'
 
 export default {
   name: 'Group',
@@ -401,6 +392,19 @@ export default {
     },
     treeselectInput(value) {
       this.treeselectValue = value
+    },
+    syncDingTalkDepts() {
+      this.loading = true
+      syncDingTalkDeptsApi().then(res => {
+        this.loading = false
+        this.getTableData()
+        this.$message({
+          showClose: true,
+          message: res.message,
+          type: 'success'
+        })
+      })
+      this.loading = false
     }
   }
 }

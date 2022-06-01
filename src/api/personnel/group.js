@@ -72,3 +72,11 @@ export function delGroup(data) {
     data
   })
 }
+// 同步钉钉部门信息
+export function syncDingTalkDeptsApi(data) {
+  return request({
+    url: '/api/group/syncDingTalkDepts',
+    method: 'post',
+    data
+  })
+}
