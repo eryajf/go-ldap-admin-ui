@@ -4,10 +4,11 @@ name: CI
 
 # Controls when the action will run.
 on:
-  # 任意推送都会触发构建
   push:
+    branches:
+      - main
 
-  # Allows you to run this workflow manually from the Actions tab
+# Allows you to run this workflow manually from the Actions tab
 # 可以手动触发
   workflow_dispatch:
     inputs:
