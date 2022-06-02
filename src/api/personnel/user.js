@@ -26,7 +26,7 @@ export function changePwd(data) {
   })
 }
 
-// 创建用户（已完成） 
+// 创建用户（已完成）
 export function createUser(data) {
   return request({
     url: '/api/user/add',
@@ -51,4 +51,11 @@ export function batchDeleteUserByIds(data) {
     data
   })
 }
-
+// 同步钉钉用户信息
+export function syncDingTalkUsersApi(data) {
+  return request({
+    url: '/api/user/syncDingTalkUsers',
+    method: 'post',
+    data
+  })
+}
