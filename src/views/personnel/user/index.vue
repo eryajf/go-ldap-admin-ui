@@ -147,7 +147,11 @@
                   :options="departmentsOptions"
                   placeholder="请选择部门"
                   :normalizer="normalizer"
+                  value-consists-of="ALL"
                   :multiple="true"
+                  flat="true"
+                  no-children-text="没有更多选项"
+                  no-results-text="没有匹配的选项"
                   @input="treeselectInput"
                   @select="onOperatePersonChanged"
                 />
@@ -606,6 +610,7 @@ wLXapv+ZfsjG7NgdawIDAQAB
       return {
         id: node.ID,
         label: node.groupType + '=' + node.groupName,
+        isDisabled: node.groupType === 'ou',
         children: node.children
       }
     },
