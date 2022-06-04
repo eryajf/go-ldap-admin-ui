@@ -26,6 +26,9 @@
         <el-form-item>
           <el-button :disabled="multipleSelection.length === 0" :loading="loading" icon="el-icon-delete" type="danger" @click="batchDelete">批量删除</el-button>
         </el-form-item>
+        <el-form-item>
+          <el-button :loading="loading" icon="el-icon-share" type="danger" @click="syncDingTalkUsers">同步钉钉用户信息</el-button>
+        </el-form-item>
       </el-form>
 
       <el-table v-loading="loading" :data="tableData" border stripe style="width: 100%" @selection-change="handleSelectionChange">
@@ -144,7 +147,11 @@
                   :options="departmentsOptions"
                   placeholder="请选择部门"
                   :normalizer="normalizer"
+                  value-consists-of="ALL"
                   :multiple="true"
+                  flat="true"
+                  no-children-text="没有更多选项"
+                  no-results-text="没有匹配的选项"
                   @input="treeselectInput"
                   @select="onOperatePersonChanged"
                 />
@@ -176,7 +183,7 @@
 import JSEncrypt from 'jsencrypt'
 import Treeselect from '@riophae/vue-treeselect'
 import '@riophae/vue-treeselect/dist/vue-treeselect.css'
-import { getUsers, createUser, updateUserById, batchDeleteUserByIds } from '@/api/personnel/user'
+import { getUsers, createUser, updateUserById, batchDeleteUserByIds, syncDingTalkUsersApi } from '@/api/personnel/user'
 import { getRoles } from '@/api/system/role'
 import { getGroupTree } from '@/api/personnel/group'
 
@@ -603,6 +610,7 @@ wLXapv+ZfsjG7NgdawIDAQAB
       return {
         id: node.ID,
         label: node.groupType + '=' + node.groupName,
+        isDisabled: node.groupType === 'ou',
         children: node.children
       }
     },
@@ -616,6 +624,19 @@ wLXapv+ZfsjG7NgdawIDAQAB
       } else {
         this.dialogFormData.departments = this.dialogFormData.departments + ',' + obj.groupName
       }
+    },
+    syncDingTalkUsers(obj) {
+      this.loading = true
+      syncDingTalkUsersApi().then(res => {
+        this.loading = false
+        this.$message({
+          showClose: true,
+          message: res.message,
+          type: 'success'
+        })
+      })
+      this.getTableData()
+      this.loading = false
     }
   }
 }
