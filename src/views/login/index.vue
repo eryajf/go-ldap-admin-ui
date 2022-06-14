@@ -70,7 +70,7 @@ export default {
       }
     }
     return {
-      imgSrc: require('@/assets/backgd-image/back.jpeg'),
+      imgSrc: require('@/assets/backgd-image/login.jpeg'),
       loginForm: {
         username: '',
         password: ''
@@ -277,6 +277,8 @@ $light_gray:#eee;
     background-color: rgba(0,0,0,0.5);
     // overflow: hidden;
     border-radius: 8px;
+    margin-left: 850px;
+    margin-top: -125px;
   }
 
   .svg-container {
