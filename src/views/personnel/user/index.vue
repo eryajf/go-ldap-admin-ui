@@ -48,6 +48,7 @@
         <el-table-column show-overflow-tooltip sortable prop="position" label="职位" />
         <el-table-column show-overflow-tooltip sortable prop="creator" label="创建人" />
         <el-table-column show-overflow-tooltip sortable prop="introduction" label="说明" />
+        <el-table-column show-overflow-tooltip sortable prop="userDn" label="DN" />
         <el-table-column fixed="right" label="操作" align="center" width="120">
           <template slot-scope="scope">
             <el-tooltip content="编辑" effect="dark" placement="top">
