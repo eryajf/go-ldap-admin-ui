@@ -29,6 +29,7 @@
         <el-table-column type="selection" width="55" align="center" />
         <el-table-column show-overflow-tooltip sortable prop="groupName" label="名称" />
         <el-table-column show-overflow-tooltip sortable prop="groupType" label="类型" />
+        <el-table-column show-overflow-tooltip sortable prop="groupDn" label="DN" />
         <el-table-column show-overflow-tooltip sortable prop="remark" label="描述" />
         <el-table-column fixed="right" label="操作" align="center" width="220">
           <template #default="scope">
