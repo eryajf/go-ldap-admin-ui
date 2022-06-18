@@ -26,8 +26,12 @@
         <el-form-item>
           <el-button :disabled="multipleSelection.length === 0" :loading="loading" icon="el-icon-delete" type="danger" @click="batchDelete">批量删除</el-button>
         </el-form-item>
+        <br>
         <el-form-item>
           <el-button :loading="loading" icon="el-icon-share" type="danger" @click="syncDingTalkUsers">同步钉钉用户信息</el-button>
+        </el-form-item>
+        <el-form-item>
+          <el-button :loading="loading" icon="el-icon-share" type="danger" @click="syncWeComUsers">同步企业微信用户信息</el-button>
         </el-form-item>
       </el-form>
 
@@ -184,7 +188,7 @@
 import JSEncrypt from 'jsencrypt'
 import Treeselect from '@riophae/vue-treeselect'
 import '@riophae/vue-treeselect/dist/vue-treeselect.css'
-import { getUsers, createUser, updateUserById, batchDeleteUserByIds, syncDingTalkUsersApi } from '@/api/personnel/user'
+import { getUsers, createUser, updateUserById, batchDeleteUserByIds, syncDingTalkUsersApi, syncWeComUsersApi } from '@/api/personnel/user'
 import { getRoles } from '@/api/system/role'
 import { getGroupTree } from '@/api/personnel/group'
 
@@ -638,7 +642,20 @@ wLXapv+ZfsjG7NgdawIDAQAB
       })
       this.getTableData()
       this.loading = false
-    }
+    },
+    syncWeComUsers(obj) {
+      this.loading = true
+      syncWeComUsersApi().then(res => {
+        this.loading = false
+        this.$message({
+          showClose: true,
+          message: res.message,
+          type: 'success'
+        })
+      })
+      this.getTableData()
+      this.loading = false
+    },
   }
 }
 </script>
