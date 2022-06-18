@@ -11,17 +11,21 @@
         <el-form-item>
           <el-button :loading="loading" icon="el-icon-search" type="primary" @click="search">查询</el-button>
         </el-form-item>
-        <el-form-item>
+        <!-- <el-form-item>
           <el-button :loading="loading" icon="el-icon-plus" type="warning" @click="resetData">重置</el-button>
-        </el-form-item>
+        </el-form-item> -->
         <el-form-item>
           <el-button :loading="loading" icon="el-icon-plus" type="warning" @click="create">新增</el-button>
         </el-form-item>
         <el-form-item>
           <el-button :disabled="multipleSelection.length === 0" :loading="loading" icon="el-icon-delete" type="danger" @click="batchDelete">批量删除</el-button>
         </el-form-item>
+        <br>
         <el-form-item>
           <el-button :loading="loading" icon="el-icon-share" type="danger" @click="syncDingTalkDepts">同步钉钉部门</el-button>
+        </el-form-item>
+        <el-form-item>
+          <el-button :loading="loading" icon="el-icon-share" type="danger" @click="syncWeComDepts">同步企业微信部门</el-button>
         </el-form-item>
       </el-form>
 
@@ -96,7 +100,7 @@
 <script>
 import Treeselect from '@riophae/vue-treeselect'
 import '@riophae/vue-treeselect/dist/vue-treeselect.css'
-import { getGroupTree, groupAdd, groupUpdate, groupDel, syncDingTalkDeptsApi } from '@/api/personnel/group'
+import { getGroupTree, groupAdd, groupUpdate, groupDel, syncDingTalkDeptsApi, syncWeComDeptsApi } from '@/api/personnel/group'
 
 export default {
   name: 'Group',
@@ -406,7 +410,20 @@ export default {
         })
       })
       this.loading = false
-    }
+    },
+    syncWeComDepts() {
+      this.loading = true
+      syncWeComDeptsApi().then(res => {
+        this.loading = false
+        this.getTableData()
+        this.$message({
+          showClose: true,
+          message: res.message,
+          type: 'success'
+        })
+      })
+      this.loading = false
+    },
   }
 }
 </script>

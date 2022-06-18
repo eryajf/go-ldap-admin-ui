@@ -80,3 +80,12 @@ export function syncDingTalkDeptsApi(data) {
     data
   })
 }
+
+// 同步企业微信部门信息
+export function syncWeComDeptsApi(data) {
+  return request({
+    url: '/api/group/syncWeComDepts',
+    method: 'post',
+    data
+  })
+}
