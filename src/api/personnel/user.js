@@ -68,3 +68,12 @@ export function syncWeComUsersApi(data) {
     data
   })
 }
+
+// 同步飞书用户信息
+export function syncFeiShuUsersApi(data) {
+  return request({
+    url: '/api/user/syncFeiShuUsers',
+    method: 'post',
+    data
+  })
+}

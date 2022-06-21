@@ -89,3 +89,12 @@ export function syncWeComDeptsApi(data) {
     data
   })
 }
+
+// 同步企业微信部门信息
+export function syncFeiShuDeptsApi(data) {
+  return request({
+    url: '/api/group/syncFeiShuDepts',
+    method: 'post',
+    data
+  })
+}

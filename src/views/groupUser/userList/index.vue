@@ -102,7 +102,7 @@ export default {
   },
   methods: {
     handleClick(tab, event) {
-      if (tab.index === '0') {
+      if (tab.index === 0) {
         this.transParams.nickname = ''
         this.tabIndex = tab.index
         this.getTableData()
@@ -114,7 +114,7 @@ export default {
     },
     // 搜索框查询
     onInput(e) {
-      if (this.tabIndex === '0') {
+      if (this.tabIndex === 0) {
         this.transParams.nickname = e
         this.getTableData()
       } else {
@@ -124,7 +124,7 @@ export default {
     },
     // 搜索框查询
     search() {
-      if (this.tabIndex === '0') {
+      if (this.tabIndex === 0) {
         this.getTableData()
       } else {
         this.getNoMenu()
