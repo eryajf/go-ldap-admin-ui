@@ -77,3 +77,12 @@ export function syncFeiShuUsersApi(data) {
     data
   })
 }
+
+// 同步openldap用户信息
+export function syncOpenLdapUsersApi(data) {
+  return request({
+    url: '/api/user/syncOpenLdapUsers',
+    method: 'post',
+    data
+  })
+}
