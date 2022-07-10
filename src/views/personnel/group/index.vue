@@ -22,6 +22,9 @@
         </el-form-item>
         <br>
         <el-form-item>
+          <el-button :loading="loading" icon="el-icon-share" type="danger" @click="syncOpenLdapDepts">同步原ldap部门</el-button>
+        </el-form-item>
+        <el-form-item>
           <el-button :loading="loading" icon="el-icon-share" type="danger" @click="syncDingTalkDepts">同步钉钉部门</el-button>
         </el-form-item>
         <el-form-item>
@@ -103,7 +106,7 @@
 <script>
 import Treeselect from '@riophae/vue-treeselect'
 import '@riophae/vue-treeselect/dist/vue-treeselect.css'
-import { getGroupTree, groupAdd, groupUpdate, groupDel, syncDingTalkDeptsApi, syncWeComDeptsApi, syncFeiShuDeptsApi } from '@/api/personnel/group'
+import { getGroupTree, groupAdd, groupUpdate, groupDel, syncDingTalkDeptsApi, syncWeComDeptsApi, syncFeiShuDeptsApi, syncOpenLdapDeptsApi } from '@/api/personnel/group'
 
 export default {
   name: 'Group',
@@ -430,6 +433,19 @@ export default {
     syncFeiShuDepts() {
       this.loading = true
       syncFeiShuDeptsApi().then(res => {
+        this.loading = false
+        this.getTableData()
+        this.$message({
+          showClose: true,
+          message: res.message,
+          type: 'success'
+        })
+      })
+      this.loading = false
+    },
+    syncOpenLdapDepts() {
+      this.loading = true
+      syncOpenLdapDeptsApi().then(res => {
         this.loading = false
         this.getTableData()
         this.$message({

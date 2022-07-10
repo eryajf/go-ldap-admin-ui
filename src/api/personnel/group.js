@@ -90,10 +90,19 @@ export function syncWeComDeptsApi(data) {
   })
 }
 
-// 同步企业微信部门信息
+// 同步飞书部门信息
 export function syncFeiShuDeptsApi(data) {
   return request({
     url: '/api/group/syncFeiShuDepts',
+    method: 'post',
+    data
+  })
+}
+
+// 同步openldap部门信息
+export function syncOpenLdapDeptsApi(data) {
+  return request({
+    url: '/api/group/syncOpenLdapDepts',
     method: 'post',
     data
   })
