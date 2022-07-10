@@ -119,12 +119,9 @@
 
       <!-- 新增 -->
       <el-dialog :title="dialogFormTitle" :visible.sync="updateLoading">
-        <el-link
-          class="link-title"
-          href="http://ldapdoc.eryajf.net/pages/84953d/"
-          target="_blank"
-          type="primary"
-        >新增说明文档</el-link>
+        <div class="components-container">
+          <aside>动态关系管理说明文档参考： <a href="http://ldapdoc.eryajf.net/pages/84953d/" target="_blank">动态字段关系管理</a></aside>
+        </div>
         <el-form
           ref="dialogForm"
           size="small"
@@ -145,8 +142,8 @@
             </el-checkbox-group>
           </el-form-item>
 
-          <template v-if="checked == '创建用户动态'">
-            <el-form-item label="创建类型">
+          <template v-if="checked == '用户字段动态关联'">
+            <el-form-item label="类型标志">
               <el-select
                 v-model="userVal"
                 placeholder="请选择"
@@ -226,16 +223,22 @@
             <el-form-item label="说明" prop="introduction">
               <el-input
                 v-model.trim="dialogFormData.introduction"
+                placeholder="说明"
+              />
+            </el-form-item>
+            <!-- <el-form-item label="说明" prop="introduction">
+              <el-input
+                v-model.trim="dialogFormData.introduction"
                 type="textarea"
                 placeholder="说明"
                 :autosize="{ minRows: 3, maxRows: 6 }"
                 show-word-limit
                 maxlength="100"
               />
-            </el-form-item>
+            </el-form-item> -->
           </template>
           <template v-else>
-            <el-form-item label="创建类型">
+            <el-form-item label="类型标志">
               <el-select
                 v-model="groupVal"
                 placeholder="请选择"
@@ -270,11 +273,7 @@
             <el-form-item label="分组描述" prop="remark">
               <el-input
                 v-model.trim="dialogFormData.remark"
-                type="textarea"
                 placeholder="分组描述"
-                :autosize="{ minRows: 3, maxRows: 6 }"
-                show-word-limit
-                maxlength="100"
               />
             </el-form-item>
           </template>
@@ -292,12 +291,9 @@
 
       <!-- 编辑 -->
       <el-dialog :title="dialogFormTitle" :visible.sync="dialogFormVisible">
-        <el-link
-          class="link-title"
-          href="http://ldapdoc.eryajf.net/pages/84953d/"
-          target="_blank"
-          type="primary"
-        >修改说明文档</el-link>
+        <div class="components-container">
+          <aside>动态关系管理说明文档参考： <a href="http://ldapdoc.eryajf.net/pages/84953d/" target="_blank">动态字段关系管理</a></aside>
+        </div>
         <el-form
           ref="dialogForm"
           size="small"
@@ -305,12 +301,12 @@
           :rules="dialogFormRules"
           label-width="120px"
         >
-          <template v-if="checked == '创建用户动态'">
+          <template v-if="checked == '用户字段动态关联'">
             <el-form-item label="类型">
-              <el-button type="primary">创建用户动态</el-button>
+              <el-button type="primary">用户字段动态关联</el-button>
             </el-form-item>
 
-            <el-form-item label="创建类型">
+            <el-form-item label="类型标志">
               <el-select
                 v-model="userVal"
                 placeholder="请选择"
@@ -390,19 +386,15 @@
             <el-form-item label="说明" prop="introduction">
               <el-input
                 v-model.trim="dialogFormData.introduction"
-                type="textarea"
                 placeholder="说明"
-                :autosize="{ minRows: 3, maxRows: 6 }"
-                show-word-limit
-                maxlength="100"
               />
             </el-form-item>
           </template>
           <template v-else>
             <el-form-item label="类型">
-              <el-button type="primary">创建分组动态</el-button>
+              <el-button type="primary">分组字段动态关联</el-button>
             </el-form-item>
-            <el-form-item label="创建类型">
+            <el-form-item label="类型标志">
               <el-select
                 v-model="groupVal"
                 placeholder="请选择"
@@ -437,11 +429,7 @@
             <el-form-item label="分组描述" prop="remark">
               <el-input
                 v-model.trim="dialogFormData.remark"
-                type="textarea"
                 placeholder="分组描述"
-                :autosize="{ minRows: 3, maxRows: 6 }"
-                show-word-limit
-                maxlength="100"
               />
             </el-form-item>
           </template>
@@ -469,7 +457,7 @@ import {
   relationUp,
   relationDel
 } from '@/api/personnel/fieldRelation'
-const cityOptions = ['创建用户动态', '创建分组动态']
+const cityOptions = ['用户字段动态关联', '分组字段动态关联']
 export default {
   name: 'FieldRelation',
   components: {
@@ -513,7 +501,7 @@ export default {
       userVal: '',
       groupVal: '',
       updateId: '',
-      checked: ['创建用户动态'], // 新增数据默认选中
+      checked: ['用户字段动态关联'], // 新增数据默认选中
       cities: cityOptions, // 新增默认选中
       // 查询参数
       params: {
@@ -566,7 +554,7 @@ export default {
           { min: 1, max: 50, message: '长度在 1 到 50 个字符', trigger: 'blur' }
         ],
         username: [
-          { required: true, message: '请输入创建类型', trigger: 'blur' },
+          { required: true, message: '请输入类型标志', trigger: 'blur' },
           { min: 1, max: 50, message: '长度在 1 到 50 个字符', trigger: 'blur' }
         ],
         givenName: [
@@ -657,7 +645,7 @@ export default {
       this.value = this.city
     },
     changeUser(e) {
- 
+
       this.userVal = e
     },
     changeGroup(e) {
@@ -711,7 +699,7 @@ export default {
 
     // 新增
     create() {
-      this.checked = ['创建用户动态'];
+      this.checked = ['用户字段动态关联'];
       this.userVal = '',
       this.groupVal = '',
       this.dialogFormData = {},
@@ -722,9 +710,9 @@ export default {
     },
     // 修改
     update(row) {
-      
+
       const typeDialog = row.Flag.split('_')[1]
-    
+
       const {
         avatar,
         givenName,
@@ -743,12 +731,12 @@ export default {
         sourceDeptId,
         sourceDeptParentId
       } = row.Attributes
-      
+
       if (typeDialog === 'user') {
         this.updateId = row.ID
-        this.checked = ['创建用户动态'];
-        
-        
+        this.checked = ['用户字段动态关联'];
+
+
         this.userVal = row.Flag,
         this.dialogFormData.username = username, // 用户名(通常为用户名拼音) name_pinyin
         this.dialogFormData.nickname = nickname, // 中文名字 name
@@ -764,7 +752,7 @@ export default {
         this.dialogFormData.sourceUnionId = sourceUnionId // 源用户唯一ID   unionid
       } else {
         this.updateId = row.ID
-        this.checked = ['创建分组动态'];
+        this.checked = ['分组字段动态关联'];
         this.groupVal = row.Flag
         this.dialogFormData.groupName = groupName, // 分组名称（通常为分组名的拼音）
         this.dialogFormData.remark = remark, // 分组描述
@@ -781,10 +769,10 @@ export default {
     submitForm(e) {
       // console.log(e,765)
       let flag, attributes
-      if (this.checked[0] === '创建用户动态') {
+      if (this.checked[0] === '用户字段动态关联') {
         if (this.userVal === '') {
           this.$message({
-            message: '请选择创建类型',
+            message: '请选择类型标志',
             type: 'warning'
           })
           return false
@@ -794,7 +782,7 @@ export default {
       } else {
         if (this.groupVal === '') {
           this.$message({
-            message: '请选择创建类型',
+            message: '请选择类型标志',
             type: 'warning'
           })
           return false

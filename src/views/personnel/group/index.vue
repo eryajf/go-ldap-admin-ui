@@ -41,6 +41,8 @@
         <el-table-column show-overflow-tooltip sortable prop="groupType" label="类型" />
         <el-table-column show-overflow-tooltip sortable prop="groupDn" label="DN" />
         <el-table-column show-overflow-tooltip sortable prop="remark" label="描述" />
+        <el-table-column show-overflow-tooltip sortable prop="CreatedAt" label="创建时间" />
+        <el-table-column show-overflow-tooltip sortable prop="UpdatedAt" label="更新时间" />
         <el-table-column fixed="right" label="操作" align="center" width="220">
           <template #default="scope">
             <el-tooltip v-if="scope.row.groupType != 'ou'" content="添加" effect="dark" placement="top">
@@ -61,10 +63,10 @@
       <el-dialog :title="dialogFormTitle" :visible.sync="updateLoading">
         <el-form ref="dialogForm" size="small" :model="dialogFormData" :rules="dialogFormRules" label-width="120px">
           <el-form-item label="名称" prop="groupName">
-            <el-input v-model.trim="dialogFormData.groupName" placeholder="名称" />
+            <el-input v-model.trim="dialogFormData.groupName" placeholder="名称(拼音)" />
           </el-form-item>
           <el-form-item label="分组类型" prop="groupType">
-            <el-input v-model.trim="dialogFormData.groupType" placeholder="分组类型：ou/cn/..." />
+            <el-input v-model.trim="dialogFormData.groupType" placeholder="分组类型：ou或cn(建议仅第一层为ou)" />
           </el-form-item>
           <el-form-item label="上级分组" prop="parentId">
             <treeselect
