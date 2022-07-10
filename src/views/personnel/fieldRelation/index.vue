@@ -606,9 +606,13 @@ export default {
             trigger: 'blur'
           }
         ],
-        mail: [
+        // mail: [
+        //   { required: true, message: '请输入邮箱', trigger: 'blur' },
+        //   { type: 'email', message: '请输入正确的邮箱地址', trigger: ['blur', 'change'] }
+        // ],
+         mail: [
           { required: true, message: '请输入邮箱', trigger: 'blur' },
-          { type: 'email', message: '请输入正确的邮箱地址', trigger: ['blur', 'change'] }
+          { min:1,max:50, message: '请输入邮箱地址', trigger: 'blur' }
         ],
         jobNumber: [
           { required: true, message: '请输入工号', trigger: 'blur' },
@@ -628,7 +632,7 @@ export default {
             trigger: 'blur'
           }
         ],
-        mobile: [{ required: true, validator: checkPhone, trigger: 'blur' }],
+        mobile: [{ required: true, message: '请输入手机号', trigger: 'blur'}],
         introduction: [
           { required: true, message: '说明', trigger: 'blur' },
           {
@@ -653,11 +657,11 @@ export default {
       this.value = this.city
     },
     changeUser(e) {
-      console.log(e, 87)
+ 
       this.userVal = e
     },
     changeGroup(e) {
-      console.log(e, 88)
+
       this.groupVal = e
     },
     // 查询
@@ -708,17 +712,19 @@ export default {
     // 新增
     create() {
       this.checked = ['创建用户动态'];
-      (this.userVal = ''),
-      (this.groupVal = ''),
-      (this.dialogFormData = {}),
-      (this.dialogFromGroup = {}),
-      (this.dialogFormTitle = '新增')
+      this.userVal = '',
+      this.groupVal = '',
+      this.dialogFormData = {},
+      this.dialogFromGroup = {},
+      this.dialogFormTitle = '新增'
       this.updateLoading = true // 新增的展示
       this.dialogType = 'create'
     },
     // 修改
     update(row) {
+      
       const typeDialog = row.Flag.split('_')[1]
+    
       const {
         avatar,
         givenName,
@@ -737,28 +743,33 @@ export default {
         sourceDeptId,
         sourceDeptParentId
       } = row.Attributes
+      
       if (typeDialog === 'user') {
         this.updateId = row.ID
         this.checked = ['创建用户动态'];
-        (this.userVal = row.Flag)(this.dialogFormData.username = username), // 用户名(通常为用户名拼音) name_pinyin
-        (this.dialogFormData.nickname = nickname), // 中文名字 name
-        (this.dialogFormData.givenName = givenName), // 花名 name
-        (this.dialogFormData.mail = mail), // 邮箱 email
-        (this.dialogFormData.jobNumber = jobNumber), // 工号 job_number
-        (this.dialogFormData.mobile = mobile), // 手机号 mobile
-        (this.dialogFormData.avatar = avatar), // 头像 avatar
-        (this.dialogFormData.postalAddress = postalAddress), // 地址 work_place
-        (this.dialogFormData.position = position), // 职位 title
-        (this.dialogFormData.introduction = introduction), // 说明 remark
-        (this.dialogFormData.sourceUserId = sourceUserId), // 源用户ID  userid
-        (this.dialogFormData.sourceUnionId = sourceUnionId) // 源用户唯一ID   unionid
+        
+        
+        this.userVal = row.Flag,
+        this.dialogFormData.username = username, // 用户名(通常为用户名拼音) name_pinyin
+        this.dialogFormData.nickname = nickname, // 中文名字 name
+        this.dialogFormData.givenName = givenName, // 花名 name
+        this.dialogFormData.mail = mail, // 邮箱 email
+        this.dialogFormData.jobNumber = jobNumber, // 工号 job_number
+        this.dialogFormData.mobile = mobile, // 手机号 mobile
+        this.dialogFormData.avatar = avatar, // 头像 avatar
+        this.dialogFormData.postalAddress = postalAddress, // 地址 work_place
+        this.dialogFormData.position = position, // 职位 title
+        this.dialogFormData.introduction = introduction, // 说明 remark
+        this.dialogFormData.sourceUserId = sourceUserId, // 源用户ID  userid
+        this.dialogFormData.sourceUnionId = sourceUnionId // 源用户唯一ID   unionid
       } else {
         this.updateId = row.ID
         this.checked = ['创建分组动态'];
-        (this.groupVal = row.Flag)(this.dialogFormData.groupName = groupName), // 分组名称（通常为分组名的拼音）
-        (this.dialogFormData.remark = remark), // 分组描述
-        (this.dialogFormData.sourceDeptId = sourceDeptId), // 部门ID
-        (this.dialogFormData.sourceDeptParentId = sourceDeptParentId) // 父部门ID
+        this.groupVal = row.Flag
+        this.dialogFormData.groupName = groupName, // 分组名称（通常为分组名的拼音）
+        this.dialogFormData.remark = remark, // 分组描述
+        this.dialogFormData.sourceDeptId = sourceDeptId, // 部门ID
+        this.dialogFormData.sourceDeptParentId = sourceDeptParentId // 父部门ID
       }
 
       this.dialogFormTitle = '修改'
@@ -773,9 +784,8 @@ export default {
       if (this.checked[0] === '创建用户动态') {
         if (this.userVal === '') {
           this.$message({
-
             message: '请选择创建类型',
-            type: 'success'
+            type: 'warning'
           })
           return false
         }
@@ -784,9 +794,8 @@ export default {
       } else {
         if (this.groupVal === '') {
           this.$message({
-
             message: '请选择创建类型',
-            type: 'success'
+            type: 'warning'
           })
           return false
         }
