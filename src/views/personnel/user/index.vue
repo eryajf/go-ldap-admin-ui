@@ -162,11 +162,10 @@
                   :normalizer="normalizer"
                   value-consists-of="ALL"
                   :multiple="true"
-                  flat="true"
+                  :flat="true"
                   no-children-text="没有更多选项"
                   no-results-text="没有匹配的选项"
                   @input="treeselectInput"
-                  @select="onOperatePersonChanged"
                 />
               </el-form-item>
             </el-col>
@@ -415,6 +414,29 @@ wLXapv+ZfsjG7NgdawIDAQAB
       this.dialogFormData.position = row.position
     },
 
+    // 将 部门id 转换为 部门name
+    setDepartmentNameByDepartmentId() {
+      const ids = this.dialogFormData.departmentId
+      if (!ids || !ids.length) return
+      const departments = []
+      // 深度优先遍函数
+      const dfs = (node, cb) => {
+        if (!node) return
+        cb(node)
+        if (node.children && node.children.length) {
+          node.children.forEach(item => {
+            dfs(item, cb)
+          })
+        }
+      }
+      dfs(this.departmentsOptions[0], node => {
+        if (ids.includes(node.ID)) {
+          departments.push(node.groupName)
+        }
+      })
+      this.dialogFormData.departments = departments.join(',')
+    },
+
     // 提交表单
     submitForm() {
       if (this.dialogFormData.nickname === '') {
@@ -476,7 +498,8 @@ wLXapv+ZfsjG7NgdawIDAQAB
       this.$refs['dialogForm'].validate(async valid => {
         if (valid) {
           this.submitLoading = true
-
+          // 在这里自动填充下部门字段
+          this.setDepartmentNameByDepartmentId()
           this.dialogFormDataCopy = { ...this.dialogFormData }
           if (this.dialogFormData.password !== '') {
           // 密码RSA加密处理
@@ -630,14 +653,6 @@ wLXapv+ZfsjG7NgdawIDAQAB
     treeselectInput(value) {
       this.treeselectValue = value
     },
-    onOperatePersonChanged(obj) {
-      // this.dialogFormData.departmentId = obj.ID
-      if (this.dialogFormData.departments === '') {
-        this.dialogFormData.departments = obj.groupName
-      } else {
-        this.dialogFormData.departments = this.dialogFormData.departments + ',' + obj.groupName
-      }
-    },
     syncDingTalkUsers(obj) {
       this.loading = true
       syncDingTalkUsersApi().then(res => {
@@ -689,7 +704,7 @@ wLXapv+ZfsjG7NgdawIDAQAB
       })
       this.getTableData()
       this.loading = false
-    },
+    }
   }
 }
 </script>
