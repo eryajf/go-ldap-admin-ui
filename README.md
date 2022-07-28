@@ -2,9 +2,6 @@
 <h1>Go Ldap Admin</h1>
 
 [![Auth](https://img.shields.io/badge/Auth-eryajf-ff69b4)](https://github.com/eryajf)
-[![Go Version](https://img.shields.io/github/go-mod/go-version/eryajf-world/go-ldap-admin-ui)](https://github.com/eryajf/go-ldap-admin-ui)
-[![Gin Version](https://img.shields.io/badge/Gin-1.6.3-brightgreen)](https://github.com/eryajf/go-ldap-admin-ui)
-[![Gorm Version](https://img.shields.io/badge/Gorm-1.20.12-brightgreen)](https://github.com/eryajf/go-ldap-admin-ui)
 [![GitHub Issues](https://img.shields.io/github/issues/eryajf/go-ldap-admin-ui.svg)](https://github.com/eryajf/go-ldap-admin-ui/issues)
 [![GitHub Pull Requests](https://img.shields.io/github/issues-pr/eryajf/go-ldap-admin-ui)](https://github.com/eryajf/go-ldap-admin-ui/pulls)
 [![GitHub Pull Requests](https://img.shields.io/github/stars/eryajf/go-ldap-admin-ui)](https://github.com/eryajf/go-ldap-admin-ui/stargazers)
