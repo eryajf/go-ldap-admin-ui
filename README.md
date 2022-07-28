@@ -2,14 +2,14 @@
 <h1>Go Ldap Admin</h1>
 
 [![Auth](https://img.shields.io/badge/Auth-eryajf-ff69b4)](https://github.com/eryajf)
-[![Go Version](https://img.shields.io/github/go-mod/go-version/eryajf-world/go-ldap-admin)](https://github.com/eryajf/go-ldap-admin)
-[![Gin Version](https://img.shields.io/badge/Gin-1.6.3-brightgreen)](https://github.com/eryajf/go-ldap-admin)
-[![Gorm Version](https://img.shields.io/badge/Gorm-1.20.12-brightgreen)](https://github.com/eryajf/go-ldap-admin)
-[![GitHub Issues](https://img.shields.io/github/issues/eryajf/go-ldap-admin.svg)](https://github.com/eryajf/go-ldap-admin/issues)
-[![GitHub Pull Requests](https://img.shields.io/github/issues-pr/eryajf/go-ldap-admin)](https://github.com/eryajf/go-ldap-admin/pulls)
-[![GitHub Pull Requests](https://img.shields.io/github/stars/eryajf/go-ldap-admin)](https://github.com/eryajf/go-ldap-admin/stargazers)
+[![Go Version](https://img.shields.io/github/go-mod/go-version/eryajf-world/go-ldap-admin-ui)](https://github.com/eryajf/go-ldap-admin-ui)
+[![Gin Version](https://img.shields.io/badge/Gin-1.6.3-brightgreen)](https://github.com/eryajf/go-ldap-admin-ui)
+[![Gorm Version](https://img.shields.io/badge/Gorm-1.20.12-brightgreen)](https://github.com/eryajf/go-ldap-admin-ui)
+[![GitHub Issues](https://img.shields.io/github/issues/eryajf/go-ldap-admin-ui.svg)](https://github.com/eryajf/go-ldap-admin-ui/issues)
+[![GitHub Pull Requests](https://img.shields.io/github/issues-pr/eryajf/go-ldap-admin-ui)](https://github.com/eryajf/go-ldap-admin-ui/pulls)
+[![GitHub Pull Requests](https://img.shields.io/github/stars/eryajf/go-ldap-admin-ui)](https://github.com/eryajf/go-ldap-admin-ui/stargazers)
 [![HitCount](https://views.whatilearened.today/views/github/eryajf/go-ldap-admin-ui.svg)](https://github.com/eryajf/go-ldap-admin-ui)
-[![GitHub license](https://img.shields.io/github/license/eryajf/go-ldap-admin)](https://github.com/eryajf/go-ldap-admin/blob/main/LICENSE)
+[![GitHub license](https://img.shields.io/github/license/eryajf/go-ldap-admin-ui)](https://github.com/eryajf/go-ldap-admin-ui/blob/main/LICENSE)
 
 
 <p> 🌉 基于Go+Vue实现的openLDAP后台管理项目 🌉</p>
