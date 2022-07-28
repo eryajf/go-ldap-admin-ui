@@ -134,6 +134,13 @@
             <br />
             <sub><b>Xinyuandd</b></sub>
         </a>
+    </td>
+    <td align="center">
+        <a href="https://github.com/Sdaiyan">
+            <img src="https://avatars.githubusercontent.com/u/53208364?v=4" width="100;" alt="Sdaiyan"/>
+            <br />
+            <sub><b>Sdaiyan</b></sub>
+        </a>
     </td></tr>
 </table>
 <!-- readme: collaborators,contributors -end -->
