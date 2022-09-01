@@ -46,11 +46,17 @@
         <el-table-column show-overflow-tooltip sortable prop="username" label="用户名" />
         <el-table-column show-overflow-tooltip sortable prop="nickname" label="中文名" />
         <el-table-column show-overflow-tooltip sortable prop="givenName" label="花名" />
-        <el-table-column show-overflow-tooltip sortable prop="status" label="状态" align="center">
+        <!-- 使用按钮方式展示，以后改成布尔参数比较合适 -->
+        <el-table-column label="状态" align="center">
+          <template slot-scope="scope">
+            <el-switch v-model="scope.row.status" :active-value='1' :inactive-value='2' @change="userStateChanged(scope.row)"></el-switch>
+          </template>
+        </el-table-column>
+        <!-- <el-table-column show-overflow-tooltip sortable prop="status" label="状态" align="center">
           <template slot-scope="scope">
             <el-tag size="small" :type="scope.row.status === 1 ? 'success':'danger'" disable-transitions>{{ scope.row.status === 1 ? '正常':'禁用' }}</el-tag>
           </template>
-        </el-table-column>
+        </el-table-column> -->
         <el-table-column show-overflow-tooltip sortable prop="mail" label="邮箱" />
         <el-table-column show-overflow-tooltip sortable prop="mobile" label="手机号" />
         <el-table-column show-overflow-tooltip sortable prop="jobNumber" label="工号" />
@@ -195,7 +201,7 @@
 import JSEncrypt from 'jsencrypt'
 import Treeselect from '@riophae/vue-treeselect'
 import '@riophae/vue-treeselect/dist/vue-treeselect.css'
-import { getUsers, createUser, updateUserById, batchDeleteUserByIds, syncDingTalkUsersApi, syncWeComUsersApi, syncFeiShuUsersApi, syncOpenLdapUsersApi } from '@/api/personnel/user'
+import { getUsers, createUser, updateUserById, batchDeleteUserByIds, changeUserStatus, syncDingTalkUsersApi, syncWeComUsersApi, syncFeiShuUsersApi, syncOpenLdapUsersApi } from '@/api/personnel/user'
 import { getRoles } from '@/api/system/role'
 import { getGroupTree } from '@/api/personnel/group'
 
@@ -323,7 +329,11 @@ wLXapv+ZfsjG7NgdawIDAQAB
       // 删除按钮弹出框
       popoverVisible: false,
       // 表格多选
-      multipleSelection: []
+      multipleSelection: [],
+      changeUserStatusFormData: {
+        id: '',
+        status: '',
+      },
     }
   },
   created() {
@@ -598,6 +608,20 @@ wLXapv+ZfsjG7NgdawIDAQAB
           message: '已取消删除'
         })
       })
+    },
+
+    // 监听 switch 开关 状态改变
+   async userStateChanged(userInfo) {
+      this.changeUserStatusFormData.id = userInfo.ID
+      this.changeUserStatusFormData.status = userInfo.status
+
+      const { code } = await changeUserStatus(this.changeUserStatusFormData)
+
+      if (code !== 0) {
+        userInfo.status = !userInfo.status
+        return this.$message.error('更新用户状态失败')
+      }
+      this.$message.success('更新用户状态成功')
     },
 
     // 表格多选
