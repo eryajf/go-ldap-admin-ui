@@ -3,7 +3,8 @@ FROM node:14.18 AS builder
 RUN mkdir /app
 ADD . /app/
 WORKDIR /app
-RUN  git config --global url."https://".insteadOf git:// \
+RUN  sed -i 's@http://localhost:8888/@/@g' .env.production \
+     && git config --global url."https://".insteadOf git:// \
      && npm install --registry=http://registry.npmmirror.com \
      && yarn build:prod
 
