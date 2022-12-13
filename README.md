@@ -136,6 +136,13 @@
         </a>
     </td>
     <td align="center">
+        <a href="https://github.com/nnsay">
+            <img src="https://avatars.githubusercontent.com/u/14331919?v=4" width="100;" alt="nnsay"/>
+            <br />
+            <sub><b>Jimmy Wang</b></sub>
+        </a>
+    </td>
+    <td align="center">
         <a href="https://github.com/Sdaiyan">
             <img src="https://avatars.githubusercontent.com/u/53208364?v=4" width="100;" alt="Sdaiyan"/>
             <br />
