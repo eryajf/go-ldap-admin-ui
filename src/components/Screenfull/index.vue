@@ -23,7 +23,7 @@ export default {
   methods: {
     click() {
       if (!screenfull.enabled) {
-        this.$message({
+        Message({
           message: 'you browser can not work',
           type: 'warning'
         })

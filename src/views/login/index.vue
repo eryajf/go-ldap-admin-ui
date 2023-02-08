@@ -152,7 +152,6 @@ export default {
       })
     },
     changePass() {
-      // console.log(75545)
       // window.location.href='/changePass'
       this.$router.push({ path: '/changePass' })
     },
