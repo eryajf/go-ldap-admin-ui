@@ -24,8 +24,8 @@ export default {
   },
   data() {
     return {
-      title: 'Go Web Mini',
-      logo: require('@/assets/sidebar-logo/webmini.png')
+      title: 'Go Ldap Admin',
+      logo: require('@/assets/sidebar-logo/goldapadmin.png')
     }
   }
 }

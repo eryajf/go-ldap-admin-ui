@@ -127,7 +127,7 @@ export default {
           this.$message({
             showClose: true,
             message: '表单校验失败',
-            type: 'error'
+            type: 'warn'
           })
           return false
         }

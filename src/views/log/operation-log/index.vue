@@ -33,9 +33,9 @@
           </template>
         </el-table-column>
         <el-table-column show-overflow-tooltip sortable prop="startTime" label="发起时间">
-          <template slot-scope="scope">
+          <!-- <template slot-scope="scope">
             {{ parseGoTime(scope.row.startTime) }}
-          </template>
+          </template> -->
         </el-table-column>
         <el-table-column show-overflow-tooltip sortable prop="timeCost" label="请求耗时(ms)" align="center">
           <template slot-scope="scope">
@@ -141,12 +141,22 @@ export default {
       this.loading = true
       try {
         const { data } = await getOperationLogs(this.params)
-  
         this.tableData = data.logs
         this.total = data.total
       } finally {
         this.loading = false
       }
+    },
+
+    // 判断结果
+    judgeResult(res){
+      if (res.code==0){
+          Message({
+            showClose: true,
+            message: "操作成功",
+            type: 'success'
+          })
+        }
     },
 
     // 批量删除
@@ -161,22 +171,16 @@ export default {
         this.multipleSelection.forEach(x => {
           operationLogIds.push(x.ID)
         })
-        let msg = ''
         try {
-          const { message } = await batchDeleteOperationLogByIds({ operationLogIds: operationLogIds })
-          msg = message
+          await batchDeleteOperationLogByIds({ operationLogIds: operationLogIds }).then(res =>{
+            this.judgeResult(res)
+          })
         } finally {
           this.loading = false
         }
-
         this.getTableData()
-        this.$message({
-          showClose: true,
-          message: msg,
-          type: 'success'
-        })
       }).catch(() => {
-        this.$message({
+        Message({
           showClose: true,
           type: 'info',
           message: '已取消删除'
@@ -192,20 +196,14 @@ export default {
     // 单个删除
     async singleDelete(Id) {
       this.loading = true
-      let message = ''
       try {
-        const {  msg} = await batchDeleteOperationLogByIds({ operationLogIds: [Id] })
-        message = msg
+        await batchDeleteOperationLogByIds({ operationLogIds: [Id] }).then(res =>{
+          this.judgeResult(res)
+        })
       } finally {
         this.loading = false
       }
-
       this.getTableData()
-      this.$message({
-        showClose: true,
-        message: message,
-        type: 'success'
-      })
     },
 
     // 分页

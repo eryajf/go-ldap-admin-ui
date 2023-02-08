@@ -442,10 +442,21 @@ export default {
       this.dialogFormData.departments = departments.join(',')
     },
 
+    // 判断结果
+    judgeResult(res){
+      if (res.code==0){
+          Message({
+            showClose: true,
+            message: "操作成功",
+            type: 'success'
+          })
+        }
+    },
+
     // 提交表单
     submitForm() {
       if (this.dialogFormData.nickname === '') {
-        this.$message({
+        Message({
           showClose: true,
           message: '请填写昵称',
           type: 'error'
@@ -453,7 +464,7 @@ export default {
         return false
       }
       if (this.dialogFormData.username === '') {
-        this.$message({
+        Message({
           showClose: true,
           message: '请填写用户名',
           type: 'error'
@@ -461,7 +472,7 @@ export default {
         return false
       }
       if (this.dialogFormData.mail === '') {
-        this.$message({
+        Message({
           showClose: true,
           message: '请填写邮箱',
           type: 'error'
@@ -469,7 +480,7 @@ export default {
         return false
       }
       if (this.dialogFormData.jobNumber === '') {
-        this.$message({
+        Message({
           showClose: true,
           message: '请填写工号',
           type: 'error'
@@ -477,7 +488,7 @@ export default {
         return false
       }
       if (this.dialogFormData.mobile === '') {
-        this.$message({
+        Message({
           showClose: true,
           message: '请填写手机号',
           type: 'error'
@@ -485,7 +496,7 @@ export default {
         return false
       }
       if (this.dialogFormData.status === '') {
-        this.$message({
+        Message({
           showClose: true,
           message: '请填写状态',
           type: 'error'
@@ -493,7 +504,7 @@ export default {
         return false
       }
       if (this.dialogFormData.roleIds === '') {
-        this.$message({
+        Message({
           showClose: true,
           message: '请选择角色列表',
           type: 'error'
@@ -515,32 +526,26 @@ export default {
             const encPassword = encryptor.encrypt(this.dialogFormData.password)
             this.dialogFormDataCopy.password = encPassword
           }
-          let message = ''
           try {
             if (this.dialogType === 'create') {
-              const { msg } = await createUser(this.dialogFormDataCopy)
-
-              message = msg
+              await createUser(this.dialogFormDataCopy).then(res =>{
+                this.judgeResult(res)
+              })
             } else {
-              const { msg } = await updateUserById(this.dialogFormDataCopy)
-              message = msg
+              await updateUserById(this.dialogFormDataCopy).then(res =>{
+                this.judgeResult(res)
+              })
             }
           } finally {
             this.submitLoading = false
           }
-
           this.resetForm()
           this.getTableData()
-          this.$message({
-            showClose: true,
-            message: message,
-            type: 'success'
-          })
         } else {
-          this.$message({
+          Message({
             showClose: true,
             message: '表单校验失败',
-            type: 'error'
+            type: 'warn'
           })
           return false
         }
@@ -582,22 +587,16 @@ export default {
         this.multipleSelection.forEach(x => {
           userIds.push(x.ID)
         })
-        let msg = ''
         try {
-          const { message } = await batchDeleteUserByIds({ userIds: userIds })
-          msg = message
+          await batchDeleteUserByIds({ userIds: userIds }).then(res =>{
+            this.judgeResult(res)
+          })
         } finally {
           this.loading = false
         }
-
         this.getTableData()
-        this.$message({
-          showClose: true,
-          message: msg,
-          type: 'success'
-        })
       }).catch(() => {
-        this.$message({
+        Message({
           showClose: true,
           type: 'info',
           message: '已取消删除'
@@ -609,14 +608,12 @@ export default {
     async userStateChanged(userInfo) {
       this.changeUserStatusFormData.id = userInfo.ID
       this.changeUserStatusFormData.status = userInfo.status
-
       const { code } = await changeUserStatus(this.changeUserStatusFormData)
-
       if (code !== 0) {
         userInfo.status = !userInfo.status
-        return this.$message.error('更新用户状态失败')
+        return Message.error('更新用户状态失败')
       }
-      this.$message.success('更新用户状态成功')
+      Message.success('更新用户状态成功')
     },
 
     // 表格多选
@@ -627,20 +624,14 @@ export default {
     // 单个删除
     async singleDelete(Id) {
       this.loading = true
-      let msg = ''
       try {
-        const { message } = await batchDeleteUserByIds({ userIds: [Id] })
-        msg = message
+        await batchDeleteUserByIds({ userIds: [Id] }).then(res =>{
+          this.judgeResult(res)
+        })
       } finally {
         this.loading = false
       }
-
       this.getTableData()
-      this.$message({
-        showClose: true,
-        message: msg,
-        type: 'success'
-      })
     },
 
     showPwd() {
@@ -665,61 +656,45 @@ export default {
       return {
         id: node.ID,
         label: node.groupType + '=' + node.groupName,
-        isDisabled: node.groupType === 'ou',
+        isDisabled: node.groupType === 'ou' || node.groupName === 'root' || node.ID === 0,
         children: node.children
       }
     },
     treeselectInput(value) {
       this.treeselectValue = value
     },
-    syncDingTalkUsers(obj) {
+    syncDingTalkUsers() {
       this.loading = true
       syncDingTalkUsersApi().then(res => {
         this.loading = false
-        this.$message({
-          showClose: true,
-          message: res.message,
-          type: 'success'
-        })
+        this.judgeResult(res)
       })
       this.getTableData()
       this.loading = false
     },
-    syncWeComUsers(obj) {
+    syncWeComUsers() {
       this.loading = true
       syncWeComUsersApi().then(res => {
         this.loading = false
-        this.$message({
-          showClose: true,
-          message: res.message,
-          type: 'success'
-        })
+        this.judgeResult(res)
       })
       this.getTableData()
       this.loading = false
     },
-    syncFeiShuUsers(obj) {
+    syncFeiShuUsers() {
       this.loading = true
       syncFeiShuUsersApi().then(res => {
         this.loading = false
-        this.$message({
-          showClose: true,
-          message: res.message,
-          type: 'success'
-        })
+        this.judgeResult(res)
       })
       this.getTableData()
       this.loading = false
     },
-    syncOpenLdapUsers(obj) {
+    syncOpenLdapUsers() {
       this.loading = true
       syncOpenLdapUsersApi().then(res => {
         this.loading = false
-        this.$message({
-          showClose: true,
-          message: res.message,
-          type: 'success'
-        })
+        this.judgeResult(res)
       })
       this.getTableData()
       this.loading = false

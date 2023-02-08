@@ -34,13 +34,13 @@
             <el-tag size="small" :type="scope.row.noCache === 1 ? 'danger':'success'">{{ scope.row.noCache === 1 ? '否':'是' }}</el-tag>
           </template>
         </el-table-column>
-        <el-table-column show-overflow-tooltip prop="activeMenu" label="高亮菜单" />
+        <!-- <el-table-column show-overflow-tooltip prop="activeMenu" label="高亮菜单" /> -->
         <el-table-column fixed="right" label="操作" align="center" width="120">
           <template slot-scope="scope">
-            <el-tooltip content="编辑" effect="dark" placement="top">
+            <el-tooltip fixed content="编辑" effect="dark" placement="top">
               <el-button size="mini" icon="el-icon-edit" circle type="primary" @click="update(scope.row)" />
             </el-tooltip>
-            <el-tooltip class="delete-popover" content="删除" effect="dark" placement="top">
+            <el-tooltip class="delete-popover" fixed content="删除" effect="dark" placement="top">
               <el-popconfirm title="确定删除吗？" @onConfirm="singleDelete(scope.row.ID)">
                 <el-button slot="reference" size="mini" icon="el-icon-delete" circle type="danger" />
               </el-popconfirm>
@@ -101,9 +101,9 @@
               <el-radio-button label="否" />
             </el-radio-group>
           </el-form-item>
-          <el-form-item label="高亮菜单" prop="activeMenu">
+          <!-- <el-form-item label="高亮菜单" prop="activeMenu">
             <el-input v-model.trim="dialogFormData.activeMenu" placeholder="高亮菜单(activeMenu)" style="width: 440px" />
-          </el-form-item>
+          </el-form-item> -->
           <el-form-item label="上级目录" prop="parentId">
             <!-- <el-cascader
               v-model="dialogFormData.parentId"
@@ -160,6 +160,7 @@ export default {
       dialogType: '',
       dialogFormVisible: false,
       dialogFormData: {
+        ID: '',
         title: '',
         name: '',
         icon: '',
@@ -172,7 +173,7 @@ export default {
         noCache: '是',
         alwaysShow: 2,
         breadcrumb: 1,
-        activeMenu: '',
+        // activeMenu: '',
         parentId: 0
       },
       dialogFormRules: {
@@ -196,10 +197,10 @@ export default {
           { required: false, message: '请输入重定向', trigger: 'blur' },
           { min: 0, max: 100, message: '长度在 0 到 100 个字符', trigger: 'blur' }
         ],
-        activeMenu: [
-          { required: false, message: '请输入高亮菜单', trigger: 'blur' },
-          { min: 0, max: 100, message: '长度在 0 到 100 个字符', trigger: 'blur' }
-        ],
+        // activeMenu: [
+        //   { required: false, message: '请输入高亮菜单', trigger: 'blur' },
+        //   { min: 0, max: 100, message: '长度在 0 到 100 个字符', trigger: 'blur' }
+        // ],
         parentId: [
           { required: true, message: '请选择上级目录', trigger: 'change' }
         ]
@@ -223,7 +224,7 @@ export default {
         const { data } = await getMenuTree()
 
         this.tableData = data
-        this.treeselectData = [{ ID: 0, title: '顶级类目', children: data.menuTree }]
+        this.treeselectData = [{ ID: 0, title: '顶级类目', children: data }]
       } finally {
         this.loading = false
       }
@@ -249,7 +250,7 @@ export default {
       this.dialogFormData.status = row.status === 1 ? '否' : '是'
       this.dialogFormData.hidden = row.hidden === 1 ? '是' : '否'
       this.dialogFormData.noCache = row.noCache === 1 ? '否' : '是'
-      this.dialogFormData.activeMenu = row.activeMenu
+      // this.dialogFormData.activeMenu = row.activeMenu
       this.dialogFormData.parentId = row.parentId
 
       this.dialogFormTitle = '修改菜单'
@@ -257,51 +258,53 @@ export default {
       this.dialogFormVisible = true
     },
 
+    // 判断结果
+    judgeResult(res){
+      if (res.code==0){
+          Message({
+            showClose: true,
+            message: "操作成功",
+            type: 'success'
+          })
+        }
+    },
+
     // 提交表单
     submitForm() {
       this.$refs['dialogForm'].validate(async valid => {
         if (valid) {
           this.submitLoading = true
-
           if (this.dialogFormData.ID === this.dialogFormData.parentId) {
-            return this.$message({
+            return Message({
               showClose: true,
               message: '不能选择自身作为自己的上级目录',
               type: 'error'
             })
           }
-
           if (this.dialogFormData.component === '') {
             this.dialogFormData.component = 'Layout'
           }
-
           this.dialogFormData.status = this.dialogFormData.status === '是' ? 2 : 1
           this.dialogFormData.hidden = this.dialogFormData.hidden === '是' ? 1 : 2
           this.dialogFormData.noCache = this.dialogFormData.noCache === '是' ? 2 : 1
-
           const dialogFormDataCopy = { ...this.dialogFormData, parentId: this.treeselectValue }
-          let message = ''
           try {
             if (this.dialogType === 'create') {
-              const { msg } = await createMenu(dialogFormDataCopy)
-              message = msg
+              await createMenu(dialogFormDataCopy).then(res => {
+                this.judgeResult(res)
+              })
             } else {
-              const { msg } = await updateMenuById(dialogFormDataCopy)
-              message = msg
+              await updateMenuById(dialogFormDataCopy).then(res => {
+                this.judgeResult(res)
+              })
             }
           } finally {
             this.submitLoading = false
           }
-
           this.resetForm()
           this.getTableData()
-          this.$message({
-            showClose: true,
-            message: message,
-            type: 'success'
-          })
         } else {
-          this.$message({
+          Message({
             showClose: true,
             message: '表单校验失败',
             type: 'error'
@@ -332,7 +335,7 @@ export default {
         noCache: '是',
         alwaysShow: 2,
         breadcrumb: 1,
-        activeMenu: '',
+        // activeMenu: '',
         parentId: 0
       }
     },
@@ -349,22 +352,16 @@ export default {
         this.multipleSelection.forEach(x => {
           menuIds.push(x.ID)
         })
-        let message = ''
         try {
-          const { msg } = await batchDeleteMenuByIds({ menuIds: menuIds })
-          message = msg
+          await batchDeleteMenuByIds({ menuIds: menuIds }).then(res => {
+            this.judgeResult(res)
+          })
         } finally {
           this.loading = false
         }
-
         this.getTableData()
-        this.$message({
-          showClose: true,
-          message: message,
-          type: 'success'
-        })
       }).catch(() => {
-        this.$message({
+        Message({
           type: 'info',
           message: '已取消删除'
         })
@@ -379,20 +376,14 @@ export default {
     // 单个删除
     async singleDelete(Id) {
       this.loading = true
-      let message = ''
       try {
-        const { msg } = await batchDeleteMenuByIds({ menuIds: [Id] })
-        message = msg
+        await batchDeleteMenuByIds({ menuIds: [Id] }).then(res => {
+          this.judgeResult(res)
+        })
       } finally {
         this.loading = false
       }
-
       this.getTableData()
-      this.$message({
-        showClose: true,
-        message: message,
-        type: 'success'
-      })
     },
 
     // 选中图标

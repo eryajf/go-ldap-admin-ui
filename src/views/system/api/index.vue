@@ -143,6 +143,7 @@ export default {
       dialogType: '',
       dialogFormVisible: false,
       dialogFormData: {
+        ID: '',
         path: '',
         category: '',
         method: '',
@@ -214,36 +215,42 @@ export default {
       this.dialogFormVisible = true
     },
 
+    // 判断结果
+    judgeResult(res){
+      if (res.code==0){
+          Message({
+            showClose: true,
+            message: "操作成功",
+            type: 'success'
+          })
+        }
+    },
+
     // 提交表单
     submitForm() {
       this.$refs['dialogForm'].validate(async valid => {
         if (valid) {
-          let message = ''
           this.submitLoading = true
           try {
             if (this.dialogType === 'create') {
-              const { msg } = await createApi(this.dialogFormData)
-              message = msg
+              await createApi(this.dialogFormData).then(res =>{
+                this.judgeResult(res)
+              })
             } else {
-              const { msg } = await updateApiById(this.dialogFormData)
-              message = msg
+              await updateApiById(this.dialogFormData).then(res =>{
+                this.judgeResult(res)
+              })
             }
           } finally {
             this.submitLoading = false
           }
-
           this.resetForm()
           this.getTableData()
-          this.$message({
-            showClose: true,
-            message: message,
-            type: 'success'
-          })
         } else {
-          this.$message({
+          Message({
             showClose: true,
             message: '表单校验失败',
-            type: 'error'
+            type: 'warn'
           })
           return false
         }
@@ -259,6 +266,7 @@ export default {
       this.dialogFormVisible = false
       this.$refs['dialogForm'].resetFields()
       this.dialogFormData = {
+        ID: '',
         path: '',
         category: '',
         method: '',
@@ -278,22 +286,16 @@ export default {
         this.multipleSelection.forEach(x => {
           apiIds.push(x.ID)
         })
-        let message = ''
         try {
-          const { msg } = await batchDeleteApiByIds({ apiIds: apiIds })
-          message = msg
+          await batchDeleteApiByIds({ apiIds: apiIds }).then(res =>{
+            this.judgeResult(res)
+          })
         } finally {
           this.loading = false
         }
-
         this.getTableData()
-        this.$message({
-          showClose: true,
-          message: message,
-          type: 'success'
-        })
       }).catch(() => {
-        this.$message({
+        Message({
           showClose: true,
           type: 'info',
           message: '已取消删除'
@@ -309,20 +311,14 @@ export default {
     // 单个删除
     async singleDelete(Id) {
       this.loading = true
-      let message = ''
       try {
-        const { msg } = await batchDeleteApiByIds({ apiIds: [Id] })
-        message = msg
+        await batchDeleteApiByIds({ apiIds: [Id] }).then(res =>{
+          this.judgeResult(res)
+        })
       } finally {
         this.loading = false
       }
-
       this.getTableData()
-      this.$message({
-        showClose: true,
-        message: message,
-        type: 'success'
-      })
     },
 
     // 分页

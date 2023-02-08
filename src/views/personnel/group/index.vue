@@ -109,6 +109,7 @@
 import Treeselect from '@riophae/vue-treeselect'
 import '@riophae/vue-treeselect/dist/vue-treeselect.css'
 import { getGroupTree, groupAdd, groupUpdate, groupDel, syncDingTalkDeptsApi, syncWeComDeptsApi, syncFeiShuDeptsApi, syncOpenLdapDeptsApi } from '@/api/personnel/group'
+import { Message } from 'element-ui'
 
 export default {
   name: 'Group',
@@ -150,6 +151,7 @@ export default {
       dialogType: '',
       dialogFormVisible: false,
       dialogFormData: {
+        ID: '',
         groupName: '',
         parentId: 0,
         groupType: undefined,
@@ -275,36 +277,42 @@ export default {
       this.$router.push({ path: '/userList', query: row })
     },
 
+    // 判断结果
+    judgeResult(res){
+      if (res.code==0){
+          Message({
+            showClose: true,
+            message: "操作成功",
+            type: 'success'
+          })
+        }
+    },
+
     // 提交表单
     submitForm() {
       this.$refs['dialogForm'].validate(async valid => {
         if (valid) {
-          let message = ''
           this.submitLoading = true
           try {
             if (this.dialogType === 'create') {
-              const { msg } = await groupAdd(this.dialogFormData)
-              message = msg
+              await groupAdd(this.dialogFormData).then(res =>{
+                this.judgeResult(res)
+              })
             } else {
-              const { msg } = await groupUpdate(this.dialogFormData)
-              message = msg
+              await groupUpdate(this.dialogFormData).then(res =>{
+                this.judgeResult(res)
+              })
             }
           } finally {
             this.submitLoading = false
           }
-
           this.resetForm()
           this.getTableData()
-          this.$message({
-            showClose: true,
-            message: message,
-            type: 'success'
-          })
         } else {
-          this.$message({
+          Message({
             showClose: true,
             message: '表单校验失败',
-            type: 'error'
+            type: 'warn'
           })
           return false
         }
@@ -339,22 +347,16 @@ export default {
         this.multipleSelection.forEach(x => {
           groupIds.push(x.ID)
         })
-        let message = ''
         try {
-          const { msg } = await groupDel({ groupIds: groupIds })
-          message = msg
+          await groupDel({ groupIds: groupIds }).then(res => {
+            this.judgeResult(res)
+          })
         } finally {
           this.loading = false
         }
-
         this.getTableData()
-        this.$message({
-          showClose: true,
-          message: message,
-          type: 'success'
-        })
       }).catch(() => {
-        this.$message({
+        Message({
           showClose: true,
           type: 'info',
           message: '已取消删除'
@@ -370,20 +372,14 @@ export default {
     // 单个删除
     async singleDelete(Id) {
       this.loading = true
-      let message = ''
       try {
-        const { msg } = await groupDel({ groupIds: [Id] })
-        message = msg
+        await groupDel({ groupIds: [Id] }).then(res =>{
+          this.judgeResult(res)
+        })
       } finally {
         this.loading = false
       }
-
       this.getTableData()
-      this.$message({
-        showClose: true,
-        message: message,
-        type: 'success'
-      })
     },
 
     // 分页
@@ -409,52 +405,36 @@ export default {
     syncDingTalkDepts() {
       this.loading = true
       syncDingTalkDeptsApi().then(res => {
+        this.judgeResult(res)
         this.loading = false
         this.getTableData()
-        this.$message({
-          showClose: true,
-          message: res.message,
-          type: 'success'
-        })
       })
       this.loading = false
     },
     syncWeComDepts() {
       this.loading = true
       syncWeComDeptsApi().then(res => {
+        this.judgeResult(res)
         this.loading = false
         this.getTableData()
-        this.$message({
-          showClose: true,
-          message: res.message,
-          type: 'success'
-        })
       })
       this.loading = false
     },
     syncFeiShuDepts() {
       this.loading = true
       syncFeiShuDeptsApi().then(res => {
+        this.judgeResult(res)
         this.loading = false
         this.getTableData()
-        this.$message({
-          showClose: true,
-          message: res.message,
-          type: 'success'
-        })
       })
       this.loading = false
     },
     syncOpenLdapDepts() {
       this.loading = true
       syncOpenLdapDeptsApi().then(res => {
+        this.judgeResult(res)
         this.loading = false
         this.getTableData()
-        this.$message({
-          showClose: true,
-          message: res.message,
-          type: 'success'
-        })
       })
       this.loading = false
     },
