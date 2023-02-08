@@ -766,11 +766,10 @@ export default {
 
     // 提交表单
     submitForm(e) {
-      // console.log(e,765)
       let flag, attributes
       if (this.checked[0] === '用户字段动态关联') {
         if (this.userVal === '') {
-          this.$message({
+          Message({
             message: '请选择类型标志',
             type: 'warning'
           })
@@ -780,7 +779,7 @@ export default {
         attributes = this.dialogFormData
       } else {
         if (this.groupVal === '') {
-          this.$message({
+          Message({
             message: '请选择类型标志',
             type: 'warning'
           })
@@ -810,13 +809,13 @@ export default {
           }
           this.resetForm()
           this.getTableData()
-          this.$message({
+          Message({
             showClose: true,
             message: "操作成功",
             type: 'success'
           })
         } else {
-          this.$message({
+          Message({
             showClose: true,
             message: '表单校验失败',
             type: 'warn'
@@ -860,14 +859,14 @@ export default {
             this.loading = false
           }
           this.getTableData()
-          this.$message({
+          Message({
             showClose: true,
             message: "删除成功",
             type: 'success'
           })
         })
         .catch(() => {
-          this.$message({
+          Message({
             showClose: true,
             type: 'info',
             message: '已取消删除'

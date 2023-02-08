@@ -105,14 +105,14 @@ export default {
 
           this.submitLoading = false
           if (code !== 0) {
-            return this.$message({
+            return Message({
               showClose: true,
               message: msg,
               type: 'error'
             })
           }
           this.resetForm()
-          this.$message({
+          Message({
             showClose: true,
             message: '密码修改成功，请重新登录',
             type: 'success'
