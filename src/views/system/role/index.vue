@@ -162,6 +162,7 @@ export default {
       dialogType: '',
       dialogFormVisible: false,
       dialogFormData: {
+        ID: '',
         name: '',
         keyword: '',
         status: 1,
@@ -248,47 +249,47 @@ export default {
       this.dialogFormVisible = true
     },
 
+    // 判断结果
+    judgeResult(res){
+      if (res.code==0){
+          Message({
+            showClose: true,
+            message: "操作成功",
+            type: 'success'
+          })
+        }
+    },
+
     // 提交表单
     submitForm() {
       this.$refs['dialogForm'].validate(async valid => {
         if (valid) {
           this.submitLoading = true
-          let message = ''
           try {
             if (this.dialogType === 'create') {
-              const { msg } = await createRole(this.dialogFormData)
-              message = msg
+              await createRole(this.dialogFormData).then(res => {
+                this.judgeResult(res)
+              })
             } else {
-              const { msg } = await updateRoleById(this.dialogFormData.ID, this.dialogFormData)
-              message = msg
+              await updateRoleById(this.dialogFormData).then(res => {
+                this.judgeResult(res)
+              })
             }
           } finally {
             this.submitLoading = false
           }
-
           this.resetForm()
           this.getTableData()
-          this.$message({
-            showClose: true,
-            message: message,
-            type: 'success'
-          })
-        } else {
-          this.$message({
-            showClose: true,
-            message: '表单校验失败',
-            type: 'error'
-          })
-          return false
         }
       })
     },
 
-    // 提交表单
+    // 取消表单提交
     cancelForm() {
       this.resetForm()
     },
 
+    // 重置表单
     resetForm() {
       this.dialogFormVisible = false
       this.$refs['dialogForm'].resetFields()
@@ -313,22 +314,16 @@ export default {
         this.multipleSelection.forEach(x => {
           roleIds.push(x.ID)
         })
-        let msg = ''
         try {
-          const { message } = await batchDeleteRoleByIds({ roleIds: roleIds })
-          msg = message
+          await batchDeleteRoleByIds({ roleIds: roleIds }).then(res => {
+            this.judgeResult(res)
+          })
         } finally {
           this.loading = false
         }
-
         this.getTableData()
-        this.$message({
-          showClose: true,
-          message: msg,
-          type: 'success'
-        })
       }).catch(() => {
-        this.$message({
+        Message({
           type: 'info',
           message: '已取消删除'
         })
@@ -343,20 +338,14 @@ export default {
     // 单个删除
     async singleDelete(id) {
       this.loading = true
-      let msg = ''
       try {
-        const { message } = await batchDeleteRoleByIds({ roleIds: [id] })
-        msg = message
-      } finally {
+        await batchDeleteRoleByIds({ roleIds: [id] }).then(res => {
+          this.judgeResult(res)
+        })
+      }
+      finally {
         this.loading = false
       }
-
-      this.getTableData()
-      this.$message({
-        showClose: true,
-        message: msg,
-        type: 'success'
-      })
     },
 
     // 修改权限按钮
@@ -374,7 +363,6 @@ export default {
       this.menuTreeLoading = true
       try {
         const { data } = await getMenuTree()
-
         this.menuTree = data
       } finally {
         this.menuTreeLoading = false
@@ -386,7 +374,6 @@ export default {
       this.apiTreeLoading = true
       try {
         const { data } = await getApiTree()
-
         this.apiTree = data
       } finally {
         this.apiTreeLoading = false
@@ -399,10 +386,8 @@ export default {
       let rseData = []
       const params = {}
       params.roleId = roleId
-
       try {
         const { data } = await getRoleMenusById(params)
-
         rseData = data
       } finally {
         this.permissionLoading = false
@@ -421,10 +406,8 @@ export default {
       let resData = []
       const params = {}
       params.roleId = roleId
-
       try {
         const { data } = await getRoleApisById(params)
-
         resData = data
       } finally {
         this.permissionLoading = false
@@ -444,19 +427,15 @@ export default {
       const idsHalf = this.$refs.roleMenuTree.getHalfCheckedKeys()
       ids = ids.concat(idsHalf)
       ids = [...new Set(ids)]
-
       try {
-        await updateRoleMenusById({ roleId: this.roleId, menuIds: ids })
+        await updateRoleMenusById({ roleId: this.roleId, menuIds: ids }).then(res =>{
+          this.judgeResult(res)
+        })
       } finally {
         this.permissionLoading = false
       }
 
       this.permsDialogVisible = false
-      this.$message({
-        showClose: true,
-        message: '更新角色菜单成功',
-        type: 'success'
-      })
     },
 
     // 修改角色接口
@@ -464,17 +443,13 @@ export default {
       this.permissionLoading = true
       const ids = this.$refs.roleApiTree.getCheckedKeys(true)
       try {
-        await updateRoleApisById({ roleId: this.roleId, apiIds: ids })
+        await updateRoleApisById({ roleId: this.roleId, apiIds: ids }).then(res =>{
+          this.judgeResult(res)
+        })
       } finally {
         this.permissionLoading = false
       }
-
       this.permsDialogVisible = false
-      this.$message({
-        showClose: true,
-        message: '更新角色接口成功',
-        type: 'success'
-      })
     },
 
     // 确定修改角色权限

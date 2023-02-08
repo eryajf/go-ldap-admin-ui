@@ -1,17 +1,22 @@
 <template>
   <el-row :gutter="40" class="panel-group">
     <el-col v-for="item in dataInfo" :key="item.dataType" :xs="8" :sm="8" :lg="8" class="card-panel-col">
+      <a :href="item.path">
       <div class="card-panel" @click="handleSetLineChartData(item.dataType)">
         <div class="card-panel-icon-wrapper icon-people">
           <svg-icon :icon-class="item.icon" class-name="card-panel-icon" />
+          <!-- <el-link :href="item.path"><svg-icon :icon-class="item.icon" class-name="card-panel-icon" /></el-link> -->
         </div>
         <div class="card-panel-description">
           <div class="card-panel-text">
-            {{ item.dataName }}
+            <!-- <el-link :href="item.path"> -->
+              {{ item.dataName }}
+          <!-- </el-link> -->
           </div>
           <count-to :start-val="0" :end-val="item.dataCount" :duration="2600" class="card-panel-num" />
         </div>
       </div>
+    </a>
     </el-col>
   </el-row>
 </template>

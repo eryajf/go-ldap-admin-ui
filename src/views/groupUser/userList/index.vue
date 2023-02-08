@@ -156,6 +156,16 @@ export default {
     handleSelectionChange(val) {
       this.multipleSelection = val
     },
+    // 判断结果
+    judgeResult(res){
+      if (res.code==0){
+          Message({
+            showClose: true,
+            message: "操作成功",
+            type: 'success'
+          })
+        }
+    },
     // 移除操作
     async batchDelete() {
       const userRoles = []
@@ -163,24 +173,16 @@ export default {
         userRoles.push(x.userId)
       })
       this.loading = true
-      let message = ''
-
       try {
-        const { msg } = await delGroup({ groupId: Number(this.transParams.groupId), userIds: userRoles })
-        // this.$message({message: '设置成功', type: 'success'});
-        message = msg
+        await delGroup({ groupId: Number(this.transParams.groupId), userIds: userRoles }).then(res =>{
+          this.judgeResult(res)
+        })
       } finally {
         this.loading = false
       }
       setTimeout(function() {
         window.location.reload()
       }, 500)
-
-      this.$message({
-        showClose: true,
-        message: message,
-        type: 'success'
-      })
     },
     // batchAdd 添加操作
     async batchAdd() {
@@ -189,24 +191,16 @@ export default {
         userRoles.push(x.userId)
       })
       this.loading = true
-      let message = ''
-
       try {
-        const { msg } = await groupInfo({ groupId: Number(this.transParams.groupId), userIds: userRoles })
-        // this.$message({message: '设置成功', type: 'success'});
-        message = msg
+        await groupInfo({ groupId: Number(this.transParams.groupId), userIds: userRoles }).then(res => {
+          this.judgeResult(res)
+        })
       } finally {
         this.loading = false
       }
       setTimeout(function() {
         window.location.reload()
       }, 500)
-
-      this.$message({
-        showClose: true,
-        message: message,
-        type: 'success'
-      })
     }
   }
 }

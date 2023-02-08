@@ -26,9 +26,8 @@ export default {
     async submit() {
       try {
         const { msg, code } = await emailPass({ mail: this.mail })
-
         if (code === 0) {
-          this.$message({
+          Message({
             showClose: true,
             message: msg,
             type: 'success'
@@ -38,16 +37,14 @@ export default {
             this.$router.replace({ path: '/login' })
           }, 1500)
         } else {
-          this.$message({
+          Message({
             showClose: true,
             message: msg,
             type: 'error'
           })
           return false
         }
-      } finally {
-        console.log('finally')
-      }
+      } finally {}
     }
 
   }

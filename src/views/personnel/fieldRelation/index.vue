@@ -654,10 +654,9 @@ export default {
     },
     // 查询
     search() {
-      // 初始化表格数据
-      this.infoTableData = JSON.parse(JSON.stringify(this.tableData))
-      this.infoTableData = this.deal(this.infoTableData, (node) =>
-        // console.log(node,997)
+        // 初始化表格数据
+        this.infoTableData = JSON.parse(JSON.stringify(this.tableData))
+        this.infoTableData = this.deal(this.infoTableData, (node) =>
         node.Flag.includes(this.params.flag)
       )
     },
@@ -792,39 +791,35 @@ export default {
       }
       this.$refs['dialogForm'].validate(async(valid) => {
         if (valid) {
-          let message = ''
           this.submitLoading = true
           try {
             if (this.dialogType === 'create') {
-              const { msg } = await relationAdd({
+              await relationAdd({
                 flag: flag,
                 attributes: attributes
               })
-              message = msg
             } else {
-              const { msg } = await relationUp({
+              await relationUp({
                 id: this.updateId,
                 flag: flag,
                 attributes: attributes
               })
-              message = msg
             }
           } finally {
             this.submitLoading = false
           }
-
           this.resetForm()
           this.getTableData()
           this.$message({
             showClose: true,
-            message: message,
+            message: "操作成功",
             type: 'success'
           })
         } else {
           this.$message({
             showClose: true,
             message: '表单校验失败',
-            type: 'error'
+            type: 'warn'
           })
           return false
         }
@@ -859,18 +854,15 @@ export default {
           this.multipleSelection.forEach((x) => {
             groupIds.push(x.ID)
           })
-          let message = ''
           try {
-            const { msg } = await relationDel({ fieldRelationIds: groupIds })
-            message = msg
+            await relationDel({ fieldRelationIds: groupIds })
           } finally {
             this.loading = false
           }
-
           this.getTableData()
           this.$message({
             showClose: true,
-            message: message,
+            message: "删除成功",
             type: 'success'
           })
         })
@@ -885,20 +877,12 @@ export default {
     // 单个删除
     async singleDelete(Id) {
       this.loading = true
-      let message = ''
       try {
-        const { msg } = await relationDel({ fieldRelationIds: [Id] })
-        message = msg
+        await relationDel({ fieldRelationIds: [Id] })
       } finally {
         this.loading = false
       }
-
       this.getTableData()
-      this.$message({
-        showClose: true,
-        message: message,
-        type: 'success'
-      })
     },
 
     // 表格多选
