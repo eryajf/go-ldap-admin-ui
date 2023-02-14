@@ -457,6 +457,8 @@ import {
   relationUp,
   relationDel
 } from '@/api/personnel/fieldRelation'
+import { Message } from 'element-ui'
+
 const cityOptions = ['用户字段动态关联', '分组字段动态关联']
 export default {
   name: 'FieldRelation',

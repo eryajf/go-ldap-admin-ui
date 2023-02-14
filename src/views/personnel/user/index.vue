@@ -204,6 +204,7 @@ import '@riophae/vue-treeselect/dist/vue-treeselect.css'
 import { getUsers, createUser, updateUserById, batchDeleteUserByIds, changeUserStatus, syncDingTalkUsersApi, syncWeComUsersApi, syncFeiShuUsersApi, syncOpenLdapUsersApi } from '@/api/personnel/user'
 import { getRoles } from '@/api/system/role'
 import { getGroupTree } from '@/api/personnel/group'
+import { Message } from 'element-ui'
 
 export default {
   name: 'User',

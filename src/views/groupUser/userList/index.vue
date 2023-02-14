@@ -64,6 +64,7 @@
 
 <script>
 import { useGroupList, useGroupRole, groupInfo, delGroup } from '@/api/personnel/group'
+import { Message } from 'element-ui'
 
 export default {
   name: 'Group',

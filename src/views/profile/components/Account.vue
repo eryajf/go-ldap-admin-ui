@@ -42,6 +42,7 @@
 import { changePwd } from '@/api/system/user'
 import store from '@/store'
 import JSEncrypt from 'jsencrypt'
+import { Message } from 'element-ui'
 
 export default {
   data() {

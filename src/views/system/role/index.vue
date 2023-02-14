@@ -138,6 +138,7 @@
 import { getRoles, createRole, updateRoleById, batchDeleteRoleByIds, getRoleMenusById, getRoleApisById, updateRoleMenusById, updateRoleApisById } from '@/api/system/role'
 import { getMenuTree } from '@/api/system/menu'
 import { getApiTree } from '@/api/system/api'
+import { Message } from 'element-ui'
 
 export default {
   name: 'Role',
