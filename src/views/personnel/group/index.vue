@@ -45,7 +45,7 @@
         <el-table-column show-overflow-tooltip sortable prop="UpdatedAt" label="更新时间" />
         <el-table-column fixed="right" label="操作" align="center" width="220">
           <template #default="scope">
-            <el-tooltip v-if="scope.row.groupType != 'ou'" content="添加" effect="dark" placement="top">
+            <el-tooltip v-if="scope.row.groupType != 'ou' && scope.row.groupName != 'root'" content="添加" effect="dark" placement="top">
               <el-button size="mini" icon="el-icon-setting" circle type="info" @click="addUp(scope.row)" />
             </el-tooltip>
             <el-tooltip content="编辑" effect="dark" placement="top">
