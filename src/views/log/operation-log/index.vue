@@ -72,6 +72,7 @@
 <script>
 import { getOperationLogs, batchDeleteOperationLogByIds } from '@/api/log/operationLog'
 import { parseGoTime } from '@/utils/index'
+import { Message } from 'element-ui'
 
 export default {
   name: 'OperationLog',

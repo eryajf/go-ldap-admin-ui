@@ -101,6 +101,7 @@
 
 <script>
 import { getApis, createApi, updateApiById, batchDeleteApiByIds } from '@/api/system/api'
+import { Message } from 'element-ui'
 
 export default {
   name: 'Api',
