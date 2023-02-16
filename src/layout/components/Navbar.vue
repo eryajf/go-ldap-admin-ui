@@ -23,7 +23,7 @@
         <el-tooltip content="官方文档" effect="dark" placement="bottom">
           <el-link  style="font-size: 23px;" icon="el-icon-document" class="right-menu-item" href="http://ldapdoc.eryajf.net" :underline="false" target="_blank" />
         </el-tooltip>
-        <el-tooltip content="Github地址" effect="dark" placement="bottom">
+        <el-tooltip content="GitHub地址" effect="dark" placement="bottom">
           <el-link style="font-size: 23px;" class="iconfont icon-github right-menu-item" href="https://github.com/eryajf/go-ldap-admin" :underline="false" target="_blank" />
       </el-tooltip>
 
