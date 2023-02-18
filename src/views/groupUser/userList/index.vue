@@ -252,6 +252,7 @@ export default {
   }
   .container-card{
     margin: 10px;
+    margin-bottom: 100px;
   }
 
   .delete-popover{
