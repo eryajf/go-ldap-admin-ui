@@ -51,8 +51,8 @@ export default {
 }
 
 .footer-copyright {
-  position:fixed;
-  bottom:0;
+  position: absolute;
+  bottom: 0;
   left: 0;
   right: 0;
   line-height: 45px;
