@@ -55,7 +55,7 @@ export default {
   bottom: 0;
   left: 0;
   right: 0;
-  line-height: 45px;
+  line-height: 58px;
   text-align: center;
   border-top: 1px dashed #dcdfe6;
 }

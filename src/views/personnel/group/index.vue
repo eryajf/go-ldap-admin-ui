@@ -3,10 +3,16 @@
     <el-card class="container-card" shadow="always">
       <el-form size="mini" :inline="true" :model="params" class="demo-form-inline">
         <el-form-item label="名称">
-          <el-input v-model.trim="params.groupName" clearable placeholder="名称" @clear="search" />
+          <el-input style="width: 100px;" v-model.trim="params.groupName" clearable placeholder="名称" @clear="search" />
         </el-form-item>
         <el-form-item label="描述">
-          <el-input v-model.trim="params.remark" clearable placeholder="描述" @clear="search" />
+          <el-input style="width: 100px;" v-model.trim="params.remark" clearable placeholder="描述" @clear="search" />
+        </el-form-item>
+          <el-form-item label="同步状态">
+          <el-select style="width: 110px;" v-model.trim="params.syncState" clearable placeholder="同步状态" @change="search" @clear="search">
+            <el-option label="已同步" value="1" />
+            <el-option label="未同步" value="2" />
+          </el-select>
         </el-form-item>
         <el-form-item>
           <el-button :loading="loading" icon="el-icon-search" type="primary" @click="search">查询</el-button>
@@ -20,18 +26,21 @@
         <el-form-item>
           <el-button :disabled="multipleSelection.length === 0" :loading="loading" icon="el-icon-delete" type="danger" @click="batchDelete">批量删除</el-button>
         </el-form-item>
+        <el-form-item>
+          <el-button  :disabled="multipleSelection.length === 0" :loading="loading" icon="el-icon-upload2" type="success" @click="batchSync">批量同步</el-button>
+        </el-form-item>
         <br>
         <el-form-item>
-          <el-button :loading="loading" icon="el-icon-share" type="danger" @click="syncOpenLdapDepts">同步原ldap部门</el-button>
+          <el-button :loading="loading" icon="el-icon-download" type="warning" @click="syncOpenLdapDepts">同步原ldap部门</el-button>
         </el-form-item>
         <el-form-item>
-          <el-button :loading="loading" icon="el-icon-share" type="danger" @click="syncDingTalkDepts">同步钉钉部门</el-button>
+          <el-button :loading="loading" icon="el-icon-download" type="warning" @click="syncDingTalkDepts">同步钉钉部门</el-button>
         </el-form-item>
         <el-form-item>
-          <el-button :loading="loading" icon="el-icon-share" type="danger" @click="syncFeiShuDepts">同步飞书部门</el-button>
+          <el-button :loading="loading" icon="el-icon-download" type="warning" @click="syncFeiShuDepts">同步飞书部门</el-button>
         </el-form-item>
         <el-form-item>
-          <el-button :loading="loading" icon="el-icon-share" type="danger" @click="syncWeComDepts">同步企业微信部门</el-button>
+          <el-button :loading="loading" icon="el-icon-download" type="warning" @click="syncWeComDepts">同步企业微信部门</el-button>
         </el-form-item>
       </el-form>
 
@@ -56,6 +65,11 @@
                 <el-button slot="reference" size="mini" icon="el-icon-delete" circle type="danger" />
               </el-popconfirm>
             </el-tooltip>
+            <el-tooltip v-if="scope.row.syncState == 2" class="delete-popover" content="同步" effect="dark" placement="top">
+              <el-popconfirm title="确定同步吗？" @onConfirm="singleSync(scope.row.ID)">
+                <el-button slot="reference" size="mini" icon="el-icon-upload2" circle type="success" />
+              </el-popconfirm>
+            </el-tooltip>
           </template>
         </el-table-column>
       </el-table>
@@ -66,7 +80,10 @@
             <el-input v-model.trim="dialogFormData.groupName" placeholder="名称(拼音)" />
           </el-form-item>
           <el-form-item label="分组类型" prop="groupType">
-            <el-input v-model.trim="dialogFormData.groupType" placeholder="分组类型：ou或cn(建议仅第一层为ou)" />
+            <el-select v-model.trim="dialogFormData.groupType" placeholder="建议仅第一层为ou，如果不确定，就用cn" style="width:100%">
+              <el-option label="分组" value="cn" />
+              <el-option label="组织" value="ou" />
+            </el-select>
           </el-form-item>
           <el-form-item label="上级分组" prop="parentId">
             <treeselect
@@ -108,7 +125,7 @@
 <script>
 import Treeselect from '@riophae/vue-treeselect'
 import '@riophae/vue-treeselect/dist/vue-treeselect.css'
-import { getGroupTree, groupAdd, groupUpdate, groupDel, syncDingTalkDeptsApi, syncWeComDeptsApi, syncFeiShuDeptsApi, syncOpenLdapDeptsApi } from '@/api/personnel/group'
+import { getGroupTree,  groupAdd, groupUpdate, groupDel, syncDingTalkDeptsApi, syncWeComDeptsApi, syncFeiShuDeptsApi, syncOpenLdapDeptsApi, syncSqlGroups } from '@/api/personnel/group'
 import { Message } from 'element-ui'
 
 export default {
@@ -133,6 +150,7 @@ export default {
       params: {
         groupName: undefined,
         remark: undefined,
+        syncState: undefined,
         pageNum: 1,
         pageSize: 1000// 平常百姓人家应该不会有这么多数据吧,后台限制最大单次获取1000条
       },
@@ -154,7 +172,8 @@ export default {
         ID: '',
         groupName: '',
         parentId: 0,
-        groupType: undefined,
+        syncState:1,
+        groupType: '',
         remark: ''
       },
       dialogFormRules: {
@@ -211,11 +230,11 @@ export default {
     this.getTableData()
   },
   methods: {
-    // 查询
+    // // 查询
     search() {
       // 初始化表格数据
       this.infoTableData = JSON.parse(JSON.stringify(this.tableData))
-      this.infoTableData = this.deal(this.infoTableData, node => node.groupName.includes(this.params.groupName) || node.remark.includes(this.params.remark))
+      this.infoTableData = this.deal(this.infoTableData, node => node.groupName.includes(this.params.groupName) || node.remark.includes(this.params.remark)  || node.syncState.toString().includes(this.params.syncState))
     },
     resetData() {
       this.infoTableData = JSON.parse(JSON.stringify(this.tableData))
@@ -363,6 +382,34 @@ export default {
         })
       })
     },
+    // 批量同步
+    batchSync() {
+      this.$confirm('此操作批量同步数据到Ldap, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(async res => {
+        this.loading = true
+        const groupIds = []
+        this.multipleSelection.forEach(x => {
+          groupIds.push(x.ID)
+        })
+        try {
+          await syncSqlGroups({ groupIds: groupIds }).then(res => {
+            this.judgeResult(res)
+          })
+        } finally {
+          this.loading = false
+        }
+        this.getTableData()
+      }).catch(() => {
+        Message({
+          showClose: true,
+          type: 'info',
+          message: '已取消同步'
+        })
+      })
+    },
 
     // 表格多选
     handleSelectionChange(val) {
@@ -374,6 +421,18 @@ export default {
       this.loading = true
       try {
         await groupDel({ groupIds: [Id] }).then(res =>{
+          this.judgeResult(res)
+        })
+      } finally {
+        this.loading = false
+      }
+      this.getTableData()
+    },
+    // 单个同步
+    async singleSync(Id) {
+      this.loading = true
+      try {
+        await syncSqlGroups({ groupIds: [Id] }).then(res =>{
           this.judgeResult(res)
         })
       } finally {
