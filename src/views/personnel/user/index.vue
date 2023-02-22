@@ -3,19 +3,25 @@
     <el-card class="container-card" shadow="always">
       <el-form size="mini" :inline="true" :model="params" class="demo-form-inline">
         <el-form-item label="用户名">
-          <el-input v-model.trim="params.username" clearable placeholder="用户名" @clear="search" />
+          <el-input style="width: 100px;" v-model.trim="params.username" clearable placeholder="用户名" @clear="search" />
         </el-form-item>
         <el-form-item label="昵称">
-          <el-input v-model.trim="params.nickname" clearable placeholder="昵称" @clear="search" />
+          <el-input style="width: 100px;" v-model.trim="params.nickname" clearable placeholder="昵称" @clear="search" />
+        </el-form-item>
+        <el-form-item label="手机号">
+          <el-input style="width: 120px;" v-model.trim="params.mobile" clearable placeholder="手机号" @clear="search" />
         </el-form-item>
         <el-form-item label="状态">
-          <el-select v-model.trim="params.status" clearable placeholder="状态" @change="search" @clear="search">
+          <el-select style="width: 100px;" v-model.trim="params.status" clearable placeholder="状态" @change="search" @clear="search">
             <el-option label="正常" value="1" />
             <el-option label="禁用" value="2" />
           </el-select>
         </el-form-item>
-        <el-form-item label="手机号">
-          <el-input v-model.trim="params.mobile" clearable placeholder="手机号" @clear="search" />
+          <el-form-item label="同步状态">
+          <el-select style="width: 100px;" v-model.trim="params.syncState" clearable placeholder="同步状态" @change="search" @clear="search">
+            <el-option label="已同步" value="1" />
+            <el-option label="未同步" value="2" />
+          </el-select>
         </el-form-item>
         <el-form-item>
           <el-button :loading="loading" icon="el-icon-search" type="primary" @click="search">查询</el-button>
@@ -26,18 +32,21 @@
         <el-form-item>
           <el-button :disabled="multipleSelection.length === 0" :loading="loading" icon="el-icon-delete" type="danger" @click="batchDelete">批量删除</el-button>
         </el-form-item>
+        <el-form-item>
+          <el-button  :disabled="multipleSelection.length === 0" :loading="loading" icon="el-icon-upload2" type="success" @click="batchSync">批量同步</el-button>
+        </el-form-item>
         <br>
         <el-form-item>
-          <el-button :loading="loading" icon="el-icon-share" type="danger" @click="syncOpenLdapUsers">同步原ldap用户信息</el-button>
+          <el-button :loading="loading" icon="el-icon-download" type="warning" @click="syncOpenLdapUsers">同步原ldap用户信息</el-button>
         </el-form-item>
         <el-form-item>
-          <el-button :loading="loading" icon="el-icon-share" type="danger" @click="syncDingTalkUsers">同步钉钉用户信息</el-button>
+          <el-button :loading="loading" icon="el-icon-download" type="warning" @click="syncDingTalkUsers">同步钉钉用户信息</el-button>
         </el-form-item>
         <el-form-item>
-          <el-button :loading="loading" icon="el-icon-share" type="danger" @click="syncFeiShuUsers">同步飞书用户信息</el-button>
+          <el-button :loading="loading" icon="el-icon-download" type="warning" @click="syncFeiShuUsers">同步飞书用户信息</el-button>
         </el-form-item>
         <el-form-item>
-          <el-button :loading="loading" icon="el-icon-share" type="danger" @click="syncWeComUsers">同步企业微信用户信息</el-button>
+          <el-button :loading="loading" icon="el-icon-download" type="warning" @click="syncWeComUsers">同步企业微信用户信息</el-button>
         </el-form-item>
       </el-form>
 
@@ -67,7 +76,7 @@
         <el-table-column show-overflow-tooltip sortable prop="userDn" label="DN" />
         <el-table-column show-overflow-tooltip sortable prop="CreatedAt" label="创建时间" />
         <el-table-column show-overflow-tooltip sortable prop="UpdatedAt" label="更新时间" />
-        <el-table-column fixed="right" label="操作" align="center" width="120">
+        <el-table-column fixed="right" label="操作" align="center" width="150">
           <template slot-scope="scope">
             <el-tooltip content="编辑" effect="dark" placement="top">
               <el-button size="mini" icon="el-icon-edit" circle type="primary" @click="update(scope.row)" />
@@ -75,6 +84,11 @@
             <el-tooltip class="delete-popover" content="删除" effect="dark" placement="top">
               <el-popconfirm title="确定删除吗？" @onConfirm="singleDelete(scope.row.ID)">
                 <el-button slot="reference" size="mini" icon="el-icon-delete" circle type="danger" />
+              </el-popconfirm>
+            </el-tooltip>
+            <el-tooltip v-if="scope.row.syncState == 2" class="delete-popover" content="同步" effect="dark" placement="top">
+              <el-popconfirm title="确定同步吗？" @onConfirm="singleSync(scope.row.ID)">
+                <el-button slot="reference" size="mini" icon="el-icon-upload2" circle type="success" />
               </el-popconfirm>
             </el-tooltip>
           </template>
@@ -201,7 +215,7 @@
 import JSEncrypt from 'jsencrypt'
 import Treeselect from '@riophae/vue-treeselect'
 import '@riophae/vue-treeselect/dist/vue-treeselect.css'
-import { getUsers, createUser, updateUserById, batchDeleteUserByIds, changeUserStatus, syncDingTalkUsersApi, syncWeComUsersApi, syncFeiShuUsersApi, syncOpenLdapUsersApi } from '@/api/personnel/user'
+import { getUsers, createUser, updateUserById, batchDeleteUserByIds, changeUserStatus, syncDingTalkUsersApi, syncWeComUsersApi, syncFeiShuUsersApi, syncOpenLdapUsersApi, syncSqlUsers } from '@/api/personnel/user'
 import { getRoles } from '@/api/system/role'
 import { getGroupTree } from '@/api/personnel/group'
 import { Message } from 'element-ui'
@@ -236,6 +250,7 @@ export default {
         username: '',
         nickname: '',
         status: '',
+        syncState: '',
         mobile: '',
         pageNum: 1,
         pageSize: 10
@@ -604,6 +619,34 @@ export default {
         })
       })
     },
+    // 批量同步
+    batchSync() {
+      this.$confirm('此操作批量将数据库的用户同步到Ldap, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(async res => {
+        this.loading = true
+        const userIds = []
+        this.multipleSelection.forEach(x => {
+          userIds.push(x.ID)
+        })
+        try {
+          await syncSqlUsers({ userIds: userIds }).then(res =>{
+            this.judgeResult(res)
+          })
+        } finally {
+          this.loading = false
+        }
+        this.getTableData()
+      }).catch(() => {
+        Message({
+          showClose: true,
+          type: 'info',
+          message: '已取消同步'
+        })
+      })
+    },
 
     // 监听 switch 开关 状态改变
     async userStateChanged(userInfo) {
@@ -627,6 +670,18 @@ export default {
       this.loading = true
       try {
         await batchDeleteUserByIds({ userIds: [Id] }).then(res =>{
+          this.judgeResult(res)
+        })
+      } finally {
+        this.loading = false
+      }
+      this.getTableData()
+    },
+    // 单个同步
+    async singleSync(Id) {
+      this.loading = true
+      try {
+        await syncSqlUsers({ userIds: [Id] }).then(res =>{
           this.judgeResult(res)
         })
       } finally {

@@ -107,3 +107,11 @@ export function syncOpenLdapDeptsApi(data) {
     data
   })
 }
+// 同步数据库的分组到ldap
+export function syncSqlGroups(data) {
+  return request({
+    url: '/api/group/syncSqlGroups',
+    method: 'post',
+    data
+  })
+}

@@ -96,3 +96,12 @@ export function syncOpenLdapUsersApi(data) {
     data
   })
 }
+
+// 同步Sql中的用户到ldap
+export function syncSqlUsers(data) {
+  return request({
+    url: '/api/user/syncSqlUsers',
+    method: 'post',
+    data
+  })
+}
