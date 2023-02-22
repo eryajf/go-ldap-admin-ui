@@ -8,9 +8,6 @@
         <el-form-item label="昵称">
           <el-input style="width: 100px;" v-model.trim="params.nickname" clearable placeholder="昵称" @clear="search" />
         </el-form-item>
-        <el-form-item label="手机号">
-          <el-input style="width: 120px;" v-model.trim="params.mobile" clearable placeholder="手机号" @clear="search" />
-        </el-form-item>
         <el-form-item label="状态">
           <el-select style="width: 100px;" v-model.trim="params.status" clearable placeholder="状态" @change="search" @clear="search">
             <el-option label="正常" value="1" />
