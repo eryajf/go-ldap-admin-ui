@@ -81,8 +81,8 @@
           </el-form-item>
           <el-form-item label="分组类型" prop="groupType">
             <el-select v-model.trim="dialogFormData.groupType" placeholder="建议仅第一层为ou，如果不确定，就用cn" style="width:100%">
-              <el-option label="分组" value="cn" />
-              <el-option label="组织" value="ou" />
+              <el-option label="cn[分组]" value="cn" />
+              <el-option label="ou[组织]" value="ou" />
             </el-select>
           </el-form-item>
           <el-form-item label="上级分组" prop="parentId">
