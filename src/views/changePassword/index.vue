@@ -1,95 +1,101 @@
 <template>
-  <div class="pass-page">
-    <div class="pass-mian">
-      <input v-model.trim="mail" placeholder="请输入邮箱" class="pass-input" @change="changeInput($event)">
-      <div class="pass-btn" @click="submit">确定</div>
-    </div>
+  <div class="reset-pass">
+    <el-form ref="form" :model="form" size="medium" class="form-container">
+      <el-form-item label="邮箱">
+        <div class="input-container">
+          <el-input v-model="form.mail" placeholder="请输入个人邮箱"></el-input>
+          <el-button type="primary" @click="sendEmailCode">发送验证码</el-button>
+        </div>
+      </el-form-item>
+      <el-form-item label="验证码" class="code-item">
+        <el-input v-model="form.code" placeholder="请输入验证码"></el-input>
+      </el-form-item>
+      <el-form-item class="reset-item">
+        <el-button type="primary" @click="resetPass">重置密码</el-button>
+      </el-form-item>
+    </el-form>
   </div>
 </template>
 
 <script>
-import { emailPass } from '@/api/system/user'
+import { emailPass,sendCode } from '@/api/system/user'
+import { Message } from 'element-ui'
 
 export default {
   name: 'ChangePass',
   data() {
     return {
       // 查询参数
-      mail: ''
+      form: {
+        mail: "",
+        code: ""
+      }
     }
   },
   methods: {
-    // 查询
-    changeInput(e) {
-      this.mail = e.target.value
-    },
-    async submit() {
-      try {
-        const { msg, code } = await emailPass({ mail: this.mail })
-        if (code === 0) {
+    // 判断结果
+    judgeResult(res){
+      if (res.code==0){
           Message({
             showClose: true,
-            message: msg,
+            message: "操作成功",
             type: 'success'
           })
-          // 重新登录
-          setTimeout(() => {
-            this.$router.replace({ path: '/login' })
-          }, 1500)
-        } else {
-          Message({
-            showClose: true,
-            message: msg,
-            type: 'error'
-          })
-          return false
         }
-      } finally {}
-    }
+    },
 
+    // 发送邮箱验证码
+    async sendEmailCode() {
+      console.log('aaaaaaaa',this.form.mail);
+
+      await sendCode({ mail: this.form.mail }).then(res =>{
+        this.judgeResult(res)
+      })
+    },
+    // 重置密码
+    async resetPass() {
+      await emailPass(this.form).then(res =>{
+        this.judgeResult(res)
+      })
+      // 重新登录
+      setTimeout(() => {
+        this.$router.replace({ path: '/login' })
+      }, 1500)
+    },
   }
 }
 </script>
 
 <style scoped lang="scss">
-.pass-page{
-  .pass-mian{
-    padding-top:25%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin:0 20%;
-    .pass-input{
-      flex: 2;
-      height: 45px;
-      line-height: 45px;
-      font-size: 18px;
-    }
-    .pass-btn{
-      margin-left: 20px;
-      width: 15%;
-      height: 48px;
-      background: #1990FF;
-      color:#fff;
-      font-size: 18px;
-      line-height: 48px;
-      text-align: center;
-      border-radius: 20px;
-    }
-  }
-  // .container-card{
+.reset-pass {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
 
-  //   padding-top:25%;
-  //   border: 0px solid #fff;
-  //   box-shadow:0 0px 0px;
-  //   border-bottom: 0;
-  //   .demo-form-inline{
-  //     display: flex;
-  //     .from-items{
-  //       text-align: center;
-  //     }
-  //   }
+.form-container {
+  width: 400px;
+}
 
-  // }
+.input-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.input-container .el-input {
+  flex: 1;
+  margin-right: 10px;
+}
+
+.code-item .el-form-item__label {
+  width: 80px;
+}
+.code-item .el-input {
+  width: 345px;
+}
+
+.reset-item {
+  text-align: right;
 }
 </style>

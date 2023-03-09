@@ -25,6 +25,14 @@ export function changePwd(data) {
     data
   })
 }
+// 输入邮箱获取验证码
+export function sendCode(data) {
+  return request({
+    url: '/api/base/sendcode',
+    method: 'post',
+    data
+  })
+}
 // 邮箱更新用户密码（已完成）
 export function emailPass(data) {
   return request({
@@ -33,7 +41,7 @@ export function emailPass(data) {
     data
   })
 }
-// 创建用户（已完成） 
+// 创建用户（已完成）
 export function createUser(data) {
   return request({
     url: '/api/user/add',
