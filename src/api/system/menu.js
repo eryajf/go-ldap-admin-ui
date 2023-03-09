@@ -51,10 +51,11 @@ export function getUserMenusByUserId(Id) {
   })
 }
 
-// 获取用户的可访问菜单树 (已完成)
-export function getUserMenuTreeByUserId() {
+// 获取用户的可访问菜单树
+export function getUserMenuTreeByUserId(params) {
   return request({
-    url: '/api/menu/tree',
-    method: 'get'
+    url: '/api/menu/access/tree/',
+    method: 'get',
+    params
   })
 }

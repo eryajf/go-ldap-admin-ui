@@ -61,7 +61,7 @@ const actions = {
       let accessedRoutes = []
       const {roles}=userinfo
       // 获取菜单树
-      getUserMenuTreeByUserId().then(res => {
+      getUserMenuTreeByUserId({id: roles[0].ID}).then(res => {
 
         const { data } = res
         const menuTree = data
