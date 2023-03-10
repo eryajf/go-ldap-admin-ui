@@ -54,7 +54,7 @@ export function getUserMenusByUserId(Id) {
 // 获取用户的可访问菜单树
 export function getUserMenuTreeByUserId(params) {
   return request({
-    url: '/api/menu/access/tree/',
+    url: '/api/menu/access/tree',
     method: 'get',
     params
   })
