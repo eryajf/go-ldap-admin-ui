@@ -1,0 +1,40 @@
+name: Build Release
+
+on:
+  release:
+    types: [created,published] # 表示在创建新的 Release 时触发
+
+env: # 设置环境变量
+  TZ: Asia/Shanghai # 时区（设置时区可使页面中的`最近更新时间`使用时区时间）
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout 🛎️
+        uses: actions/checkout@v3
+      - name: Inject slug/short variables
+        uses: rlespinasse/github-slug-action@v4
+
+      - name: build project ⚗️
+        uses: actions/setup-node@v3
+        with:
+          node-version: 14
+
+      - run: |
+          yarn
+          yarn build:prod
+
+      - run: |
+          mkdir go-ldap-admin-ui
+          mv README.md LICENSE default.conf go-ldap-admin-ui
+          mv dist go-ldap-admin-ui
+          tar zcvf go-ldap-admin-ui-${{ env.GITHUB_REF_NAME }}.tar.gz go-ldap-admin-ui
+          md5 go-ldap-admin-ui-${{ env.GITHUB_REF_NAME }}.tar.gz > go-ldap-admin-ui-${{ env.GITHUB_REF_NAME }}.tar.gz.md5
+
+      - name: Upload release package
+        uses: softprops/action-gh-release@v1
+        with:
+          files: |
+            go-ldap-admin-ui-${{ env.GITHUB_REF_NAME }}.tar.gz
+            go-ldap-admin-ui-${{ env.GITHUB_REF_NAME }}.tar.gz.md5
