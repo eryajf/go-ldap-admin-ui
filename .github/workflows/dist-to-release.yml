@@ -32,9 +32,7 @@ jobs:
           mv README.md LICENSE default.conf go-ldap-admin-ui
           mv dist go-ldap-admin-ui
           tar zcvf go-ldap-admin-ui-${{ env.GITHUB_REF_NAME }}.tar.gz go-ldap-admin-ui
-          sudo apt-get update
-          sudo apt-get install md5sum
-          md5 go-ldap-admin-ui-${{ env.GITHUB_REF_NAME }}.tar.gz > go-ldap-admin-ui-${{ env.GITHUB_REF_NAME }}.tar.gz.md5
+          openssl md5 go-ldap-admin-ui-${{ env.GITHUB_REF_NAME }}.tar.gz > go-ldap-admin-ui-${{ env.GITHUB_REF_NAME }}.tar.gz.md5
 
       - name: Upload release package
         uses: softprops/action-gh-release@v1
