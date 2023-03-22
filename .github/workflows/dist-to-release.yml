@@ -22,7 +22,9 @@ jobs:
           node-version: 14
 
       - run: |
-          yarn
+          sed -i 's@http://localhost:8888/@/@g' .env.production
+          git config --global url."https://".insteadOf git://
+          npm install --registry=http://registry.npmmirror.com
           yarn build:prod
 
       - run: |
