@@ -468,7 +468,6 @@ export default {
         this.loading = false
         this.getTableData()
       })
-      this.loading = false
     },
     syncWeComDepts() {
       this.loading = true
@@ -477,7 +476,6 @@ export default {
         this.loading = false
         this.getTableData()
       })
-      this.loading = false
     },
     syncFeiShuDepts() {
       this.loading = true
@@ -486,7 +484,6 @@ export default {
         this.loading = false
         this.getTableData()
       })
-      this.loading = false
     },
     syncOpenLdapDepts() {
       this.loading = true
@@ -495,8 +492,7 @@ export default {
         this.loading = false
         this.getTableData()
       })
-      this.loading = false
-    },
+    }
   }
 }
 </script>

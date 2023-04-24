@@ -720,38 +720,34 @@ export default {
     syncDingTalkUsers() {
       this.loading = true
       syncDingTalkUsersApi().then(res => {
-        this.loading = false
         this.judgeResult(res)
+        this.loading = false
+        this.getTableData()
       })
-      this.getTableData()
-      this.loading = false
     },
     syncWeComUsers() {
       this.loading = true
       syncWeComUsersApi().then(res => {
-        this.loading = false
         this.judgeResult(res)
+        this.loading = false
+        this.getTableData()
       })
-      this.getTableData()
-      this.loading = false
     },
     syncFeiShuUsers() {
       this.loading = true
       syncFeiShuUsersApi().then(res => {
-        this.loading = false
         this.judgeResult(res)
+        this.loading = false
+        this.getTableData()
       })
-      this.getTableData()
-      this.loading = false
     },
     syncOpenLdapUsers() {
       this.loading = true
       syncOpenLdapUsersApi().then(res => {
-        this.loading = false
         this.judgeResult(res)
+        this.loading = false
+        this.getTableData()
       })
-      this.getTableData()
-      this.loading = false
     }
   }
 }
