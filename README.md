@@ -142,6 +142,13 @@
             <br />
             <sub><b>Sdaiyan</b></sub>
         </a>
+    </td>
+    <td align="center">
+        <a href="https://github.com/wang-xiaowu">
+            <img src="https://avatars.githubusercontent.com/u/44340137?v=4" width="100;" alt="wang-xiaowu"/>
+            <br />
+            <sub><b>Xiaowu</b></sub>
+        </a>
     </td></tr>
 </table>
 <!-- readme: collaborators,contributors -end -->
