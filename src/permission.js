@@ -34,8 +34,8 @@ router.beforeEach(async(to, from, next) => {
         try {
           // get user info
           // note: roles must be a object array! such as: ['admin'] or ,['developer','editor']
-          const { id, roles } = await store.dispatch('user/getInfo')
-          const userinfo = { id: id, roles: roles }
+          const { ID, roles } = await store.dispatch('user/getInfo')
+          const userinfo = { id: ID, roles: roles }
           // generate accessible routes map based on roles
 
           const accessRoutes = await store.dispatch('permission/generateRoutes', userinfo)
@@ -49,7 +49,7 @@ router.beforeEach(async(to, from, next) => {
           next({ ...to, replace: true })
         } catch (error) {
           // remove token and go to login page to re-login
-         
+
           await store.dispatch('user/resetToken')
           Message.error(error || 'Has Error')
           next(`/login?redirect=${to.path}`)
@@ -59,7 +59,7 @@ router.beforeEach(async(to, from, next) => {
     }
   } else {
     /* has no token*/
-   
+
     if (whiteList.indexOf(to.path) !== -1) {
       //在免费登录白名单，直接去
       next()
