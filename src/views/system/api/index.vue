@@ -3,10 +3,10 @@
     <el-card class="container-card" shadow="always">
       <el-form size="mini" :inline="true" :model="params" class="demo-form-inline">
         <el-form-item label="访问路径">
-          <el-input v-model.trim="params.path" clearable placeholder="访问路径" @clear="search" />
+          <el-input v-model.trim="params.path" clearable placeholder="访问路径" @keyup.enter.native="search" @clear="search" />
         </el-form-item>
         <el-form-item label="所属类别">
-          <el-input v-model.trim="params.category" clearable placeholder="所属类别" @clear="search" />
+          <el-input v-model.trim="params.category" clearable placeholder="所属类别" @keyup.enter.native="search" @clear="search" />
         </el-form-item>
         <el-form-item label="请求方法">
           <el-select v-model.trim="params.method" clearable placeholder="请求方式" @change="search" @clear="search">
@@ -18,7 +18,7 @@
           </el-select>
         </el-form-item>
         <el-form-item label="创建人">
-          <el-input v-model.trim="params.creator" clearable placeholder="创建人" @clear="search" />
+          <el-input v-model.trim="params.creator" clearable placeholder="创建人" @keyup.enter.native="search" @clear="search" />
         </el-form-item>
         <el-form-item>
           <el-button :loading="loading" icon="el-icon-search" type="primary" @click="search">查询</el-button>

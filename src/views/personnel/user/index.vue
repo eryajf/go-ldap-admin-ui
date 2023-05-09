@@ -3,10 +3,10 @@
     <el-card class="container-card" shadow="always">
       <el-form size="mini" :inline="true" :model="params" class="demo-form-inline">
         <el-form-item label="用户名">
-          <el-input style="width: 100px;" v-model.trim="params.username" clearable placeholder="用户名" @clear="search" />
+          <el-input style="width: 100px;" v-model.trim="params.username" clearable placeholder="用户名" @keyup.enter.native="search" @clear="search" />
         </el-form-item>
         <el-form-item label="昵称">
-          <el-input style="width: 100px;" v-model.trim="params.nickname" clearable placeholder="昵称" @clear="search" />
+          <el-input style="width: 100px;" v-model.trim="params.nickname" clearable placeholder="昵称" @keyup.enter.native="search" @clear="search" />
         </el-form-item>
         <el-form-item label="状态">
           <el-select style="width: 100px;" v-model.trim="params.status" clearable placeholder="状态" @change="search" @clear="search">
