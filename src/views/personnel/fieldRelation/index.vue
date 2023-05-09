@@ -12,6 +12,7 @@
             v-model.trim="params.remark"
             clearable
             placeholder="描述"
+            @keyup.enter.native="search"
             @clear="search"
           />
         </el-form-item>

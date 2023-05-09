@@ -3,16 +3,16 @@
     <el-card class="container-card" shadow="always">
       <el-form size="mini" :inline="true" :model="params" class="demo-form-inline">
         <el-form-item label="请求人">
-          <el-input v-model.trim="params.username" clearable placeholder="请求人" @clear="search" />
+          <el-input v-model.trim="params.username" clearable placeholder="请求人" @keyup.enter.native="search" @clear="search" />
         </el-form-item>
         <el-form-item label="IP地址">
-          <el-input v-model.trim="params.ip" clearable placeholder="IP地址" @clear="search" />
+          <el-input v-model.trim="params.ip" clearable placeholder="IP地址" @keyup.enter.native="search" @clear="search" />
         </el-form-item>
         <el-form-item label="请求路径">
-          <el-input v-model.trim="params.path" clearable placeholder="请求路径" @clear="search" />
+          <el-input v-model.trim="params.path" clearable placeholder="请求路径" @keyup.enter.native="search" @clear="search" />
         </el-form-item>
         <el-form-item label="请求状态">
-          <el-input v-model.trim="params.status" clearable placeholder="请求状态" @clear="search" />
+          <el-input v-model.trim="params.status" clearable placeholder="请求状态" @keyup.enter.native="search" @clear="search" />
         </el-form-item>
         <el-form-item>
           <el-button :loading="loading" icon="el-icon-search" type="primary" @click="search">查询</el-button>
