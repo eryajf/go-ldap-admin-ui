@@ -129,6 +129,13 @@
         </a>
     </td>
     <td align="center">
+        <a href="https://github.com/wang-xiaowu">
+            <img src="https://avatars.githubusercontent.com/u/44340137?v=4" width="100;" alt="wang-xiaowu"/>
+            <br />
+            <sub><b>Xiaowu</b></sub>
+        </a>
+    </td>
+    <td align="center">
         <a href="https://github.com/nnsay">
             <img src="https://avatars.githubusercontent.com/u/14331919?v=4" width="100;" alt="nnsay"/>
             <br />
@@ -140,13 +147,6 @@
             <img src="https://avatars.githubusercontent.com/u/53208364?v=4" width="100;" alt="Sdaiyan"/>
             <br />
             <sub><b>Sdaiyan</b></sub>
-        </a>
-    </td>
-    <td align="center">
-        <a href="https://github.com/wang-xiaowu">
-            <img src="https://avatars.githubusercontent.com/u/44340137?v=4" width="100;" alt="wang-xiaowu"/>
-            <br />
-            <sub><b>Xiaowu</b></sub>
         </a>
     </td></tr>
 </table>
