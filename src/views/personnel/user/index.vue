@@ -710,7 +710,7 @@ export default {
       return {
         id: node.ID,
         label: node.groupType + '=' + node.groupName,
-        isDisabled: node.groupType === 'ou' || node.groupName === 'root' || node.ID === 0,
+        isDisabled: node.groupType === 'ou' || node.groupName === 'root',
         children: node.children
       }
     },
