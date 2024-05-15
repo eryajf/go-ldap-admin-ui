@@ -18,3 +18,9 @@ export function batchDeleteOperationLogByIds(data) {
   })
 }
 
+export function CleanOperationLog() {
+  return request({
+    url: '/api/log/operation/clean',
+    method: 'delete'
+  })
+}

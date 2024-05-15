@@ -3,33 +3,87 @@
     <el-card class="container-card" shadow="always">
       <el-form size="mini" :inline="true" :model="params" class="demo-form-inline">
         <el-form-item label="请求人">
-          <el-input v-model.trim="params.username" clearable placeholder="请求人" @keyup.enter.native="search" @clear="search" />
+          <el-input
+            v-model.trim="params.username"
+            clearable
+            placeholder="请求人"
+            @keyup.enter.native="search"
+            @clear="search"
+          />
         </el-form-item>
         <el-form-item label="IP地址">
           <el-input v-model.trim="params.ip" clearable placeholder="IP地址" @keyup.enter.native="search" @clear="search" />
         </el-form-item>
         <el-form-item label="请求路径">
-          <el-input v-model.trim="params.path" clearable placeholder="请求路径" @keyup.enter.native="search" @clear="search" />
+          <el-input
+            v-model.trim="params.path"
+            clearable
+            placeholder="请求路径"
+            @keyup.enter.native="search"
+            @clear="search"
+          />
         </el-form-item>
+        <!-- <el-form-item label="请求方式">
+          <el-input v-model.trim="params.method" clearable placeholder="请求方式" @keyup.enter.native="search"
+            @clear="search" />
+        </el-form-item> -->
+        <el-form-item prop="method" label="请求方式">
+          <el-select v-model="params.method" placeholder="请选择请求状态" clearable @change="search" @clear="search">
+            <el-option v-for="item in RequestList" :key="item.value" :label="item.label" :value="item.value" />
+          </el-select>
+        </el-form-item>
+
         <el-form-item label="请求状态">
-          <el-input v-model.trim="params.status" clearable placeholder="请求状态" @keyup.enter.native="search" @clear="search" />
+          <el-input
+            v-model.trim="params.status"
+            clearable
+            placeholder="请求状态"
+            @keyup.enter.native="search"
+            @clear="search"
+          />
         </el-form-item>
         <el-form-item>
           <el-button :loading="loading" icon="el-icon-search" type="primary" @click="search">查询</el-button>
         </el-form-item>
         <el-form-item>
-          <el-button :disabled="multipleSelection.length === 0" :loading="loading" icon="el-icon-delete" type="danger" @click="batchDelete">批量删除</el-button>
+          <el-button
+            :disabled="multipleSelection.length === 0"
+            :loading="loading"
+            icon="el-icon-delete"
+            type="danger"
+            @click="batchDelete"
+          >批量删除</el-button>
+        </el-form-item>
+        <el-form-item>
+          <el-button type="danger" plain icon="el-icon-delete" size="mini" @click="handleClean">清空日志</el-button>
         </el-form-item>
       </el-form>
 
-      <el-table v-loading="loading" :data="tableData" border stripe style="width: 100%" @selection-change="handleSelectionChange">
+      <el-table
+        v-loading="loading"
+        :data="tableData"
+        border
+        stripe
+        style="width: 100%"
+        @selection-change="handleSelectionChange"
+      >
         <el-table-column type="selection" width="55" align="center" />
         <el-table-column show-overflow-tooltip sortable prop="username" label="请求人" />
         <el-table-column show-overflow-tooltip sortable prop="ip" label="IP地址" />
         <el-table-column show-overflow-tooltip sortable prop="path" label="请求路径" />
+        <el-table-column show-overflow-tooltip sortable prop="method" label="请求方式" align="center">
+          <template slot-scope="scope">
+            <el-tag v-if="scope.row.method === 'GET'" type="success">GET</el-tag>
+            <el-tag v-else-if="scope.row.method === 'POST'" type="warning">POST</el-tag>
+            <el-tag v-else-if="scope.row.method === 'PUT'" type="primary">PUT</el-tag>
+            <el-tag v-else-if="scope.row.method === 'DELETE'" type="danger">DELETE</el-tag>
+            <el-tag v-else type="info">{{ scope.row.method }}</el-tag>
+          </template>
+        </el-table-column>
         <el-table-column show-overflow-tooltip sortable prop="status" label="请求状态" align="center">
           <template slot-scope="scope">
-            <el-tag size="small" :type="scope.row.status | statusTagFilter" disable-transitions>{{ scope.row.status }}</el-tag>
+            <el-tag size="small" :type="scope.row.status | statusTagFilter" disable-transitions>{{ scope.row.status
+            }}</el-tag>
           </template>
         </el-table-column>
         <el-table-column show-overflow-tooltip sortable prop="startTime" label="发起时间">
@@ -39,7 +93,8 @@
         </el-table-column>
         <el-table-column show-overflow-tooltip sortable prop="timeCost" label="请求耗时(ms)" align="center">
           <template slot-scope="scope">
-            <el-tag size="small" :type="scope.row.timeCost | timeCostTagFilter" disable-transitions>{{ scope.row.timeCost }}</el-tag>
+            <el-tag size="small" :type="scope.row.timeCost | timeCostTagFilter" disable-transitions>{{ scope.row.timeCost
+            }}</el-tag>
           </template>
         </el-table-column>
         <el-table-column show-overflow-tooltip sortable prop="desc" label="说明" />
@@ -70,7 +125,7 @@
 </template>
 
 <script>
-import { getOperationLogs, batchDeleteOperationLogByIds } from '@/api/log/operationLog'
+import { getOperationLogs, batchDeleteOperationLogByIds, CleanOperationLog } from '@/api/log/operationLog'
 import { parseGoTime } from '@/utils/index'
 import { Message } from 'element-ui'
 
@@ -123,7 +178,20 @@ export default {
       // 删除按钮弹出框
       popoverVisible: false,
       // 表格多选
-      multipleSelection: []
+      multipleSelection: [],
+      RequestList: [{
+        value: 'GET',
+        label: 'GET'
+      }, {
+        value: 'POST',
+        label: 'POST'
+      }, {
+        value: 'DELETE',
+        label: 'DELETE'
+      }, {
+        value: 'PUT',
+        label: 'PUT'
+      }]
     }
   },
   created() {
@@ -150,14 +218,36 @@ export default {
     },
 
     // 判断结果
-    judgeResult(res){
-      if (res.code==0){
-          Message({
-            showClose: true,
-            message: "操作成功",
-            type: 'success'
-          })
+    judgeResult(res) {
+      if (res.code === 0) {
+        Message({
+          showClose: true,
+          message: '操作成功',
+          type: 'success'
+        })
+      }
+    },
+    // 清空日志
+    handleClean() {
+      this.$confirm('此操作将永久删除, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(async res => {
+        this.loading = true
+        try {
+          await CleanOperationLog()
+        } finally {
+          this.loading = false
         }
+        this.getTableData()
+      }).catch(() => {
+        Message({
+          showClose: true,
+          type: 'info',
+          message: '已取消删除'
+        })
+      })
     },
 
     // 批量删除
@@ -173,7 +263,7 @@ export default {
           operationLogIds.push(x.ID)
         })
         try {
-          await batchDeleteOperationLogByIds({ operationLogIds: operationLogIds }).then(res =>{
+          await batchDeleteOperationLogByIds({ operationLogIds: operationLogIds }).then(res => {
             this.judgeResult(res)
           })
         } finally {
@@ -198,7 +288,7 @@ export default {
     async singleDelete(Id) {
       this.loading = true
       try {
-        await batchDeleteOperationLogByIds({ operationLogIds: [Id] }).then(res =>{
+        await batchDeleteOperationLogByIds({ operationLogIds: [Id] }).then(res => {
           this.judgeResult(res)
         })
       } finally {
@@ -221,12 +311,12 @@ export default {
 </script>
 
 <style scoped>
-  .container-card{
-    margin: 10px;
-    margin-bottom: 100px;
-  }
+.container-card {
+  margin: 10px;
+  margin-bottom: 100px;
+}
 
-  .delete-popover{
-    margin-left: 10px;
-  }
+.delete-popover {
+  margin-left: 10px;
+}
 </style>
