@@ -23,10 +23,6 @@
             @clear="search"
           />
         </el-form-item>
-        <!-- <el-form-item label="请求方式">
-          <el-input v-model.trim="params.method" clearable placeholder="请求方式" @keyup.enter.native="search"
-            @clear="search" />
-        </el-form-item> -->
         <el-form-item prop="method" label="请求方式">
           <el-select v-model="params.method" placeholder="请选择请求状态" clearable @change="search" @clear="search">
             <el-option v-for="item in RequestList" :key="item.value" :label="item.label" :value="item.value" />
@@ -236,7 +232,9 @@ export default {
       }).then(async res => {
         this.loading = true
         try {
-          await CleanOperationLog()
+          await CleanOperationLog().then(res => {
+            this.judgeResult(res)
+          })
         } finally {
           this.loading = false
         }
