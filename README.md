@@ -35,16 +35,16 @@
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
+
 ## 🏊 在线体验
 
 提供在线体验地址如下：
 
-|     分类      |                                           地址                                           |          用户名           | 密码   |
-| :-----------: | :--------------------------------------------------------------------------------------: | :-----------------------: | ------ |
-| go-ldap-admin |       [http://demo-go-ldap-admin.eryajf.net](http://demo-go-ldap-admin.eryajf.net)       |           admin           | 123456 |
-| phpLdapAdmin  | [http://demo-go-ldap-admin.eryajf.net:8091/](http://demo-go-ldap-admin.eryajf.net:8091/) | cn=admin,dc=eryajf,dc=net | 123456 |
+- 地址：[http://117.62.201.166:8888](http://117.62.201.166:8888)
+- 登陆信息：admin/123456
 
-在线环境可能不稳，如果遇到访问异常，或者数据错乱，请联系我进行修复。
+> 在线环境可能不稳，如果遇到访问异常，或者数据错乱，请联系我进行修复。请勿填写个人敏感信息。
+
 
 **页面功能概览：**
 
