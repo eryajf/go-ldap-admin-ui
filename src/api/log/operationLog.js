@@ -12,7 +12,7 @@ export function getOperationLogs(params) {
 // 批量删除操作日志(已完成)
 export function batchDeleteOperationLogByIds(data) {
   return request({
-    url: '/api//log/operation/delete',
+    url: '/api/log/operation/delete',
     method: 'post',
     data
   })
